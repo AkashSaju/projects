@@ -79,7 +79,7 @@ uploaded_file = st.file_uploader("Upload X-ray Image", type=['jpg', 'jpeg', 'png
 
 if uploaded_file is not None:
     image = Image.open(uploaded_file).convert("RGB")
-    st.image(image, caption="Uploaded X-ray", use_column_width=True)
+    st.image(image, caption="Uploaded X-ray", use_container_width=True)
 
     model = load_model()
     input_tensor = transform_image(image)
@@ -97,7 +97,7 @@ if uploaded_file is not None:
     img_np = np.array(image.resize((224, 224))) / 255.0
     heatmap = cv2.applyColorMap(np.uint8(255 * cam), cv2.COLORMAP_JET)[..., ::-1] / 255.0
     overlay = 0.4 * heatmap + 0.6 * img_np
-    st.image(overlay, caption="Grad-CAM Overlay", use_column_width=True)
+    st.image(overlay, caption="Grad-CAM Overlay", use_container_width=True)
 
     st.markdown("### 📋 All Class Probabilities")
     for i, prob in enumerate(probs):
