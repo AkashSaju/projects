@@ -1,12 +1,3 @@
-import gdown
-
-MODEL_PATH = "chexnet_model.pth"
-DRIVE_ID = "1hVlKjWQilNl9WvhideqhIuJ-dJoGXLy0"
-if not os.path.exists(MODEL_PATH):
-    gdown.download(f"https://drive.google.com/uc?id={DRIVE_ID}", MODEL_PATH, quiet=False)
-
-
-
 # app.py
 import streamlit as st
 import torch
@@ -17,25 +8,31 @@ import numpy as np
 import cv2
 from PIL import Image
 import os
+import gdown  # ← Needed for Drive model download
 
-# Disease labels
+# ====== 🔁 Auto-download model from Google Drive ======
+MODEL_PATH = "chexnet_model.pth"
+DRIVE_ID = "1hVlKjWQilNl9WvhideqhIuJ-dJoGXLy0"
+if not os.path.exists(MODEL_PATH):
+    gdown.download(f"https://drive.google.com/uc?id={DRIVE_ID}", MODEL_PATH, quiet=False)
+
+# ====== Disease labels ======
 class_names = [
     'Atelectasis', 'Cardiomegaly', 'Consolidation', 'Edema', 'Effusion',
     'Emphysema', 'Fibrosis', 'Hernia', 'Infiltration', 'Mass',
     'Nodule', 'Pleural_Thickening', 'Pneumonia', 'Pneumothorax', 'No Finding'
 ]
 
-# Load model
+# ====== Load model ======
 @st.cache_resource
 def load_model():
     model = models.densenet121(pretrained=False)
     model.classifier = nn.Linear(1024, len(class_names))
-   model.load_state_dict(torch.load(MODEL_PATH, map_location=torch.device('cpu')))
-
+    model.load_state_dict(torch.load(MODEL_PATH, map_location=torch.device('cpu')))
     model.eval()
     return model
 
-# Image transform
+# ====== Image transform ======
 def transform_image(image):
     transform = transforms.Compose([
         transforms.Resize((224, 224)),
@@ -44,7 +41,7 @@ def transform_image(image):
     ])
     return transform(image).unsqueeze(0)
 
-# Grad-CAM
+# ====== Grad-CAM function ======
 def generate_gradcam(model, image_tensor, class_idx, layer_name='features.denseblock4'):
     gradients, activations = [], []
 
@@ -74,9 +71,10 @@ def generate_gradcam(model, image_tensor, class_idx, layer_name='features.denseb
     handle.remove()
     return cam
 
-# UI
+# ====== Streamlit UI ======
 st.title("🩺 Chest X-ray Disease Detector with Grad-CAM")
 st.markdown("Upload a Chest X-ray and get predictions + heatmap.")
+
 uploaded_file = st.file_uploader("Upload X-ray Image", type=['jpg', 'jpeg', 'png'])
 
 if uploaded_file is not None:
