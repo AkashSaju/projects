@@ -1,3 +1,12 @@
+import gdown
+
+MODEL_PATH = "chexnet_model.pth"
+DRIVE_ID = "1hVlKjWQilNl9WvhideqhIuJ-dJoGXLy0"
+if not os.path.exists(MODEL_PATH):
+    gdown.download(f"https://drive.google.com/uc?id={DRIVE_ID}", MODEL_PATH, quiet=False)
+
+
+
 # app.py
 import streamlit as st
 import torch
@@ -21,7 +30,8 @@ class_names = [
 def load_model():
     model = models.densenet121(pretrained=False)
     model.classifier = nn.Linear(1024, len(class_names))
-    model.load_state_dict(torch.load("chexnet_model.pth", map_location=torch.device('cpu')))
+   model.load_state_dict(torch.load(MODEL_PATH, map_location=torch.device('cpu')))
+
     model.eval()
     return model
 
