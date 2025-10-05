@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HarvestHub - Product Listings</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Header -->
+  <header class="auth-header">
+    <h1>🌿 HarvestHub</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="login.html">Login</a>
+      <a href="register.html">Register</a>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="listing-container">
+    <!-- Search & Sort -->
+    <section class="top-controls">
+      <div class="search-bar">
+        <input type="search" id="searchInput" placeholder="Search by name, farmer, or location..." />
+        <button id="searchBtn">Search</button>
+      </div>
+      <div class="sort-dropdown">
+        <label for="sortSelect">Sort by:</label>
+        <select id="sortSelect">
+          <option value="">Select</option>
+          <option value="priceAsc">Price: Low to High</option>
+          <option value="priceDesc">Price: High to Low</option>
+          <option value="rating">Rating</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- Layout: Sidebar + Product Grid -->
+    <div class="listing-layout">
+      <!-- Filters -->
+      <aside class="filters">
+        <h3>Filters</h3>
+
+        <div class="filter-group">
+          <label>Location</label>
+          <input type="text" id="filterLocation" />
+        </div>
+
+        <div class="filter-group">
+          <label>Category</label>
+          <label><input type="checkbox" value="Vegetable" class="filter-category" /> Vegetable</label>
+          <label><input type="checkbox" value="Fruit" class="filter-category" /> Fruit</label>
+          <label><input type="checkbox" value="Grain" class="filter-category" /> Grain</label>
+        </div>
+
+        <div class="filter-group">
+          <label>Price Range</label>
+          <input type="number" id="minPrice" placeholder="Min ₹" />
+          <input type="number" id="maxPrice" placeholder="Max ₹" />
+        </div>
+
+        <div class="filter-group">
+          <label>Selling Type</label>
+          <label><input type="checkbox" value="fixed" class="filter-type" /> Fixed</label>
+          <label><input type="checkbox" value="auction" class="filter-type" /> Auction</label>
+        </div>
+
+        <div class="filter-group">
+          <label>Min. Rating</label>
+          <input type="number" min="1" max="5" id="minRating" />
+        </div>
+
+        <div class="filter-buttons">
+          <button id="applyFilters">Apply Filters</button>
+          <button id="resetFilters">Reset</button>
+        </div>
+      </aside>
+
+      <!-- Product Grid -->
+      <section class="product-grid" id="productGrid">
+        <!-- JS injects product cards here -->
+      </section>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination-controls">
+      <button id="prevPage">Previous</button>
+      <button id="nextPage">Next</button>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <span>HarvestHub</span>
+      <div class="footer-links">
+        <a href="#">Terms of Service</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Contact Us</a>
+      </div>
+      <p>© 2025 HarvestHub. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="product-listing.js"></script>
+</body>
+</html>

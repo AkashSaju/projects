@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - HarvestHub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2e7d32;
+            --secondary-color: #dcedc8;
+            --text-color: #333;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --header-bg: rgba(255, 255, 255, 0.85);
+            --red-flag: #e53935;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(rgba(240, 245, 230, 0.9), rgba(240, 245, 230, 0.9)), url('images/market_bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: var(--text-color);
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .profile-container {
+            display: flex;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 1200px;
+            min-height: 80vh;
+        }
+
+        .profile-sidebar {
+            flex: 0 0 280px;
+            padding: 2rem;
+            background-color: var(--secondary-color);
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px;
+            text-align: center;
+        }
+
+        .profile-pic {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .profile-sidebar h2 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0.25rem;
+        }
+
+        .profile-sidebar p {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .profile-nav {
+            list-style: none;
+            text-align: left;
+        }
+
+        .profile-nav li {
+            margin-bottom: 1rem;
+        }
+
+        .profile-nav a {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: var(--text-color);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .profile-nav a:hover, .profile-nav a.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .profile-content {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        .profile-content h1 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 1rem;
+        }
+
+        .info-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .info-group label {
+            display: block;
+            font-weight: 500;
+            color: #666;
+            margin-bottom: 0.25rem;
+        }
+
+        .info-group span {
+            display: block;
+            font-size: 1rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .history-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .history-item {
+            padding: 1rem;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .history-item.auction {
+            background-color: #fff9e6;
+        }
+
+        .history-item.purchase {
+            background-color: #f0fdf4;
+        }
+
+        .logout-btn {
+            background-color: var(--red-flag);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+     /* Make profile picture perfectly circular */
+    .profile-pic {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--primary-color);
+}
+
+/* Align Profile Overview properly */
+.profile-section.active {
+    display: block;
+    text-align: left; /* ensure content is left-aligned */
+    padding-left: 0;  /* remove extra padding if needed */
+}
+
+
+
+
+    </style>
+</head>
+<body>
+    <aside class="profile-sidebar">
+    <!-- Profile Picture -->
+    <div style="position: relative; margin-bottom: 1rem;">
+        <img id="profile-pic" src="images/user_profile.jpg" alt="User Profile Picture" class="profile-pic">
+        <!-- Upload button overlay -->
+        <input type="file" id="profilePhotoInput" name="profilePhoto" accept="image/*" style="display:none;">
+        <button type="button" id="uploadBtn" style="
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            padding: 4px 8px;
+            font-size: 0.8rem;
+            border-radius: 6px;
+            border: none;
+            background-color: var(--primary-color);
+            color: white;
+            cursor: pointer;
+        ">Change</button>
+    </div>
+
+    <h2 id="profile-name" style="text-align:center;">User</h2>
+    <p id="profile-location" style="text-align:center;">Location</p>
+
+    <ul class="profile-nav">
+        <li><a href="#" class="active" data-section="overview"><i class="fas fa-user-circle"></i> Profile Overview</a></li>
+        <li><a href="#" data-section="info"><i class="fas fa-info-circle"></i> Account Information</a></li>
+        <li><a href="#" data-section="history"><i class="fas fa-history"></i> Purchase & Auction History</a></li>
+        <li id="add-product-link" style="display:none;"><a href="add-product.html"><i class="fas fa-plus-circle"></i> Add Product</a></li>
+        <li id="admin-dashboard-link" style="display:none;"><a href="admin.html"><i class="fas fa-tools"></i> Admin Dashboard</a></li>
+        <li id="delivery-dashboard-link" style="display:none;"><a href="delivery.html"><i class="fas fa-truck"></i> Delivery Dashboard</a></li>
+        <li><a href="#" data-section="settings"><i class="fas fa-cog"></i> Account Settings</a></li>
+    </ul>
+</aside>
+
+
+
+        <main class="profile-content">
+            <!-- Overview -->
+<div id="overview" class="profile-section active">
+    <h1>Profile Overview</h1>
+    <p>Welcome to your personal dashboard.</p>
+
+    <!-- Farmer products (only for farmers) -->
+    <div id="farmer-products-section" style="display:none; margin-top:2rem;">
+        <h2>My Listed Products</h2>
+        <ul id="farmer-products-list" style="list-style:none; padding:0;"></ul>
+    </div>
+</div>
+
+
+            <!-- Account Information -->
+            <div id="info" class="profile-section" style="display: none;">
+                <h1>Account Information</h1>
+                <div class="info-group"><label>User Type</label><span id="user-type"></span></div>
+                <div class="info-group"><label>Full Name</label><span id="user-name"></span></div>
+                <div class="info-group"><label>Email</label><span id="user-email"></span></div>
+                <div class="info-group"><label>Contact Number</label><span id="user-contact"></span></div>
+                <div class="info-group"><label>Location (Pincode)</label><span id="user-pincode"></span></div>
+                <div class="info-group"><label>Detected Location</label><span id="user-autofill-location"></span></div>
+                <div class="info-group"><label>Date of Birth</label><span id="user-dob"></span></div>
+
+                <!-- Farmer Extra Info -->
+                <div id="farmer-info" style="display:none;">
+                    <div class="info-group"><label>Farm Name</label><span id="farm-name"></span></div>
+                    <div class="info-group"><label>Farm Location</label><span id="farm-location"></span></div>
+                    <div class="info-group"><label>Farm Description</label><span id="farm-description"></span></div>
+                </div>
+            </div>
+
+            <!-- History -->
+            <div id="history" class="profile-section" style="display: none;">
+                <h1>Purchase & Auction History</h1>
+                <ul class="history-list"></ul>
+            </div>
+
+             <!-- My Orders -->
+              <div id="my-orders" class="profile-section" style="display: none;">
+              <h1>My Orders</h1>
+               <div id="orders-container"></div>
+              </div>
+
+
+            <!-- Settings -->
+            <div id="settings" class="profile-section" style="display: none;">
+                <h1>Account Settings</h1>
+                <p>Manage your account preferences.</p>
+                <button class="logout-btn">Log Out</button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('.profile-nav a[data-section]');
+            const sections = document.querySelectorAll('.profile-section');
+
+            // Navigation
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    navLinks.forEach(nav => nav.classList.remove('active'));
+                    sections.forEach(section => section.style.display = 'none');
+                    const sectionId = link.dataset.section;
+                    link.classList.add('active');
+                    document.getElementById(sectionId).style.display = 'block';
+                });
+            });
+
+            // Load user profile from localStorage
+            const userProfile = JSON.parse(localStorage.getItem('userProfile'));
+            if (!userProfile) {
+                alert("⚠️ No logged-in user found. Redirecting to login page.");
+                window.location.href = "login.html";
+                return;
+            }
+
+            // Sidebar info
+            document.getElementById('profile-name').textContent = userProfile.fullName || "User";
+            document.getElementById('profile-location').textContent = userProfile.location || "";
+
+            // Account Info
+            document.getElementById('user-type').textContent = userProfile.userType || "";
+            document.getElementById('user-name').textContent = userProfile.fullName || "";
+            document.getElementById('user-email').textContent = userProfile.email || "";
+            document.getElementById('user-contact').textContent = userProfile.contact || "";
+            document.getElementById('user-pincode').textContent = userProfile.pincode || "";
+            document.getElementById('user-autofill-location').textContent = userProfile.location || "";
+            document.getElementById('user-dob').textContent = userProfile.dob || "";
+
+            // Role-based UI
+            if (userProfile.userType === 'farmer') {
+                document.getElementById('add-product-link').style.display = 'block';
+                document.getElementById('farmer-info').style.display = 'block';
+                document.getElementById('farm-name').textContent = userProfile.farmName || "";
+                document.getElementById('farm-location').textContent = userProfile.farmLocation || "";
+                document.getElementById('farm-description').textContent = userProfile.farmDescription || "";
+            }
+            if (userProfile.userType === 'admin') {
+                document.getElementById('admin-dashboard-link').style.display = 'block';
+            }
+            if (userProfile.userType === 'delivery') {
+                document.getElementById('delivery-dashboard-link').style.display = 'block';
+            }
+
+            // Show My Orders in sidebar
+const ordersLink = document.createElement('li');
+ordersLink.innerHTML = `<a href="#" data-section="my-orders"><i class="fas fa-shopping-cart"></i> My Orders</a>`;
+document.querySelector('.profile-nav').appendChild(ordersLink);
+
+// Load orders when clicked
+ordersLink.querySelector('a').addEventListener('click', async (e) => {
+    e.preventDefault();
+    navLinks.forEach(nav => nav.classList.remove('active'));
+    sections.forEach(section => section.style.display = 'none');
+    e.target.classList.add('active');
+    document.getElementById('my-orders').style.display = 'block';
+    loadOrders();
+});
+
+async function loadOrders() {
+    const container = document.getElementById('orders-container');
+    container.innerHTML = '<p>Loading orders...</p>';
+    try {
+        const res = await fetch(`http://localhost:5000/api/orders/user/${userProfile.id}`);
+        const orders = await res.json();
+        if (!orders.length) {
+            container.innerHTML = '<p>No orders yet.</p>';
+            return;
+        }
+        container.innerHTML = '';
+        orders.forEach(order => {
+            const card = document.createElement('div');
+            card.style.border = '1px solid #eee';
+            card.style.padding = '1rem';
+            card.style.borderRadius = '8px';
+            card.style.marginBottom = '1rem';
+            card.style.cursor = 'pointer';
+            card.style.background = '#f9f9f9';
+
+            const date = new Date(order.created_at).toLocaleDateString();
+
+            card.innerHTML = `
+                <div>
+                    <strong>Order #${order.order_id}</strong> - ₹${order.total} - <em>Ordered on: ${date}</em> - <span style="font-weight:bold;">Delivery: ${order.delivery_status || 'Pending'}</span>
+                    <div class="order-items" style="display:none; margin-top:0.5rem; padding-left:1rem;"></div>
+                </div>
+            `;
+
+            const itemsDiv = card.querySelector('.order-items');
+            order.items.forEach(item => {
+                const p = document.createElement('p');
+                p.textContent = `${item.product_name} x ${item.quantity} - ₹${item.price}`;
+                itemsDiv.appendChild(p);
+            });
+
+            card.addEventListener('click', () => {
+                itemsDiv.style.display = itemsDiv.style.display === 'none' ? 'block' : 'none';
+            });
+
+            container.appendChild(card);
+        });
+    } catch (err) {
+        console.error(err);
+        container.innerHTML = '<p style="color:red;">Failed to load orders</p>';
+    }
+}
+
+
+
+if (userProfile.userType === 'farmer') {
+    document.getElementById('add-product-link').style.display = 'block';
+    document.getElementById('farmer-info').style.display = 'block';
+    document.getElementById('farm-name').textContent = userProfile.farmName || "";
+    document.getElementById('farm-location').textContent = userProfile.farmLocation || "";
+    document.getElementById('farm-description').textContent = userProfile.farmDescription || "";
+
+    // Fetch and display farmer products
+    fetch(`http://localhost:5000/api/orders/farmer/${userProfile.id}/products`)
+      .then(res => res.json())
+      .then(products => {
+        const prodSection = document.getElementById('farmer-products-section');
+        const prodList = document.getElementById('farmer-products-list');
+        prodList.innerHTML = ''; // clear previous content if any
+        if (products.length > 0) {
+            prodSection.style.display = 'block';
+            products.forEach(p => {
+                const li = document.createElement('li');
+                li.style.border = '1px solid #eee';
+                li.style.padding = '10px';
+                li.style.marginBottom = '10px';
+                li.style.borderRadius = '8px';
+                li.innerHTML = `<strong>${p.name}</strong> - ₹${p.price} (Qty: ${p.quantity})<br>${p.description || ''}`;
+                prodList.appendChild(li);
+            });
+        } else {
+            prodSection.style.display = 'none';
+        }
+      })
+      .catch(err => console.error("Error fetching farmer products:", err));
+}
+
+
+
+            // Load purchase/auction history (dummy for now)
+            const historyList = document.querySelector(".history-list");
+            const sampleHistory = [
+                { type: "purchase", productName: "Tomatoes", price: 50, date: "2025-07-28" },
+                { type: "auction", productName: "Organic Veg Box", price: 350, date: "2025-07-25" }
+            ];
+            sampleHistory.forEach(item => {
+                const li = document.createElement("li");
+                li.className = `history-item ${item.type}`;
+                li.innerHTML = `<div><strong>${item.productName}</strong> - ₹${item.price}<p>${item.type === 'purchase' ? 'Purchased' : 'Auctioned'} on: ${item.date}</p></div>`;
+                historyList.appendChild(li);
+            });
+
+            // Logout
+            document.querySelector('.logout-btn').addEventListener('click', () => {
+                localStorage.removeItem('userProfile');
+                alert("Logged out successfully!");
+                window.location.href = "login.html";
+            });
+        });
+    </script>
+</body>
+</html>

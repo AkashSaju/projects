@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard - HarvestHub</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+    :root {
+        --primary-color: #2e7d32;
+        --secondary-color: #dcedc8;
+        --text-color: #333;
+        --card-bg: rgba(255, 255, 255, 0.95);
+        --header-bg: rgba(255, 255, 255, 0.85);
+        --red-flag: #e53935;
+    }
+    body {
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        display: flex;
+        height: 100vh;
+        overflow: hidden;
+        background: #f4f4f4;
+    }
+    aside {
+        width: 250px;
+        background-color: var(--secondary-color);
+        padding: 2rem 1rem;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    }
+    aside h2 {
+        color: var(--primary-color);
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    .sidebar-nav a {
+        display: block;
+        padding: 0.75rem 1rem;
+        margin-bottom: 0.5rem;
+        text-decoration: none;
+        color: var(--text-color);
+        border-radius: 6px;
+        transition: background-color 0.2s, color 0.2s;
+        font-weight: 500;
+    }
+    .sidebar-nav a:hover, .sidebar-nav a.active {
+        background-color: var(--primary-color);
+        color: #fff;
+    }
+    main {
+        flex: 1;
+        padding: 2rem;
+        overflow-y: auto;
+    }
+    h1 {
+        color: var(--primary-color);
+        margin-bottom: 1.5rem;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 2rem;
+        background: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    th, td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
+    th {
+        background: var(--primary-color);
+        color: #fff;
+        font-weight: 600;
+    }
+    .card {
+        background: #fff;
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+</style>
+</head>
+<body>
+
+<aside>
+    <h2><i class="fas fa-leaf"></i> HarvestHub</h2>
+    <nav class="sidebar-nav">
+        <a href="#" class="active" data-section="analytics"><i class="fas fa-chart-line"></i> Analytics</a>
+        <a href="#" data-section="users"><i class="fas fa-users"></i> Users Report</a>
+        <a href="#" data-section="products"><i class="fas fa-carrot"></i> Products Report</a>
+        <a href="#" data-section="orders"><i class="fas fa-shopping-cart"></i> Orders Report</a>
+        <a href="#" data-section="order-items"><i class="fas fa-list-ol"></i> Order Items</a>
+        <a href="#" data-section="delivery-tasks"><i class="fas fa-truck"></i> Delivery Tasks</a>
+    </nav>
+</aside>
+
+<main>
+    <div id="analytics" class="admin-section">
+        <h1>Analytics Overview</h1>
+        <div class="card">
+            <canvas id="ordersChart"></canvas>
+        </div>
+        <div class="card">
+            <canvas id="topProductsChart"></canvas>
+        </div>
+        <div class="card">
+            <canvas id="deliveryChart"></canvas>
+        </div>
+    </div>
+
+    <div id="users" class="admin-section" style="display:none;">
+        <h1>Users Report</h1>
+        <table id="usersTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Contact</th>
+                    <th>Pincode</th>
+                    <th>Farm Info</th>
+                    <th>Created At</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div id="products" class="admin-section" style="display:none;">
+        <h1>Products Report</h1>
+        <table id="productsTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Qty</th>
+                    <th>Farmer</th>
+                    <th>Description</th>
+                    <th>Created At</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div id="orders" class="admin-section" style="display:none;">
+        <h1>Orders Report</h1>
+        <table id="ordersTable">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Buyer</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Created At</th>
+                    <th># Items</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div id="order-items" class="admin-section" style="display:none;">
+        <h1>Order Items Report</h1>
+        <table id="orderItemsTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Order ID</th>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div id="delivery-tasks" class="admin-section" style="display:none;">
+        <h1>Delivery Tasks</h1>
+        <table id="deliveryTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Order ID</th>
+                    <th>Agent ID</th>
+                    <th>Pickup</th>
+                    <th>Delivery</th>
+                    <th>Status</th>
+                    <th>Created At</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const navLinks = document.querySelectorAll('.sidebar-nav a');
+    const sections = document.querySelectorAll('.admin-section');
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', e => {
+            e.preventDefault();
+            navLinks.forEach(nav => nav.classList.remove('active'));
+            sections.forEach(sec => sec.style.display = 'none');
+            link.classList.add('active');
+            document.getElementById(link.dataset.section).style.display = 'block';
+            loadSection(link.dataset.section);
+        });
+    });
+
+    async function loadSection(section) {
+        try {
+            switch(section){
+                case 'users':
+                    // This section remains unchanged and will fetch data if your backend is running.
+                    const usersRes = await fetch('http://localhost:5000/api/users');
+                    const users = await usersRes.json();
+                    const usersTbody = document.querySelector('#usersTable tbody');
+                    usersTbody.innerHTML = '';
+                    users.forEach(u => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${u.id}</td>
+                            <td>${u.userType}</td>
+                            <td>${u.fullName}</td>
+                            <td>${u.email}</td>
+                            <td>${u.contact}</td>
+                            <td>${u.pincode}</td>
+                            <td>${u.farmName || ''} / ${u.farmLocation || ''}</td>
+                            <td>${new Date(u.createdAt).toLocaleDateString() || ''}</td>
+                        `;
+                        usersTbody.appendChild(tr);
+                    });
+                    break;
+
+                case 'products':
+                    const prodRes = await fetch('http://localhost:5000/api/products');
+                    const products = await prodRes.json();
+                    const prodTbody = document.querySelector('#productsTable tbody');
+                    prodTbody.innerHTML = '';
+                    products.forEach(p => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${p.id}</td>
+                            <td>${p.name}</td>
+                            <td>${p.category}</td>
+                            <td>₹${p.price}</td>
+                            <td>${p.quantity}</td>
+                            <td>${p.farmerName || ''}</td>
+                            <td>${p.description || ''}</td>
+                            <td>${new Date(p.created_at).toLocaleDateString() || ''}</td>
+                        `;
+                        prodTbody.appendChild(tr);
+                    });
+                    break;
+
+                case 'orders':
+                     const ordersRes = await fetch('http://localhost:5000/api/orders');
+                    const orders = await ordersRes.json();
+                    const ordersTbody = document.querySelector('#ordersTable tbody');
+                    ordersTbody.innerHTML = '';
+                    orders.forEach(o => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${o.id}</td>
+                            <td>${o.buyerName || ''}</td>
+                            <td>₹${o.total}</td>
+                            <td>${o.status}</td>
+                            <td>${new Date(o.created_at).toLocaleDateString()}</td>
+                            <td>${o.items_count}</td>
+                        `;
+                        ordersTbody.appendChild(tr);
+                    });
+                    break;
+
+                case 'order-items':
+                    const itemsRes = await fetch('http://localhost:5000/api/order-items');
+                    const items = await itemsRes.json();
+                    const itemsTbody = document.querySelector('#orderItemsTable tbody');
+                    itemsTbody.innerHTML = '';
+                    items.forEach(i => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${i.id}</td>
+                            <td>${i.order_id}</td>
+                            <td>${i.product_name}</td>
+                            <td>${i.quantity}</td>
+                            <td>₹${i.price}</td>
+                            <td>₹${i.quantity * i.price}</td>
+                        `;
+                        itemsTbody.appendChild(tr);
+                    });
+                    break;
+
+                case 'delivery-tasks':
+                   const delRes = await fetch('http://localhost:5000/api/delivery/admin/all');
+
+                    const tasks = await delRes.json();
+                    const delTbody = document.querySelector('#deliveryTable tbody');
+                    delTbody.innerHTML = '';
+                    tasks.forEach(t => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${t.id}</td>
+                            <td>${t.order_id}</td>
+                            <td>${t.agent_id}</td>
+                            <td>${t.pickup_name} (${t.pickup_location})</td>
+                            <td>${t.delivery_name} (${t.delivery_location})</td>
+                            <td>${t.status}</td>
+                            <td>${new Date(t.created_at).toLocaleDateString()}</td>
+                        `;
+                        delTbody.appendChild(tr);
+                    });
+                    break;
+
+                case 'analytics':
+                    loadAnalytics();
+                    break;
+            }
+        } catch(err){
+            console.error("Error loading section", section, err);
+            const tbody = document.querySelector(`#${section}Table tbody`);
+            if(tbody){
+                tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; color: var(--red-flag);">Could not load data. Is the server running?</td></tr>`
+            }
+        }
+    }
+
+    // --- MODIFIED ANALYTICS FUNCTION ---
+    function loadAnalytics(){
+        // Dummy data for a professional look
+        const orderLabels = ['Sep 29', 'Sep 30', 'Oct 1', 'Oct 2', 'Oct 3', 'Oct 4', 'Oct 5'];
+        const orderData = [12, 19, 15, 25, 22, 30, 28];
+
+        const topProductLabels = ['Organic Tomatoes', 'Fresh Spinach', 'Farm-Fresh Eggs', 'Local Honey', 'Baby Carrots'];
+        const topProductData = [150, 132, 110, 95, 78];
+
+        const deliveryStatusLabels = ['Delivered', 'In Transit', 'Pending', 'Cancelled'];
+        const deliveryStatusData = [320, 45, 18, 7];
+
+        // Chart 1: Orders Over Time (Line Chart)
+        const ctxOrders = document.getElementById('ordersChart').getContext('2d');
+        new Chart(ctxOrders, {
+            type: 'line',
+            data: {
+                labels: orderLabels,
+                datasets: [{
+                    label: 'Orders per Day',
+                    data: orderData,
+                    borderColor: 'rgba(46, 125, 50, 1)',
+                    backgroundColor: 'rgba(46, 125, 50, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Orders Over the Last 7 Days',
+                        font: { size: 18 }
+                    }
+                }
+            }
+        });
+
+        // Chart 2: Top 5 Products by Sales (Bar Chart)
+        const ctxProd = document.getElementById('topProductsChart').getContext('2d');
+        new Chart(ctxProd, {
+            type: 'bar',
+            data: {
+                labels: topProductLabels,
+                datasets: [{
+                    label: 'Units Sold',
+                    data: topProductData,
+                    backgroundColor: [
+                        'rgba(46, 125, 50, 0.8)',
+                        'rgba(76, 175, 80, 0.8)',
+                        'rgba(129, 199, 132, 0.8)',
+                        'rgba(165, 214, 167, 0.8)',
+                        'rgba(200, 230, 201, 0.8)'
+                    ],
+                    borderColor: 'rgba(46, 125, 50, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Top 5 Selling Products',
+                        font: { size: 18 }
+                    },
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        // Chart 3: Delivery Status (Pie Chart)
+        const ctxDel = document.getElementById('deliveryChart').getContext('2d');
+        new Chart(ctxDel, {
+            type: 'pie',
+            data: {
+                labels: deliveryStatusLabels,
+                datasets:[{
+                    label:'Delivery Status',
+                    data: deliveryStatusData,
+                    backgroundColor: ['#2e7d32', '#fbc02d', '#64b5f6', '#e53935']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Overall Delivery Status',
+                        font: { size: 18 }
+                    }
+                }
+            }
+        });
+    }
+
+    // Load default section
+    loadSection('analytics');
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Place Order - HarvestHub</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Poppins', sans-serif; background:#f7f7f7; margin:0; padding:20px; color:#333; }
+    .container { max-width:900px; margin:18px auto; background:#fff; padding:18px; border-radius:10px; box-shadow:0 8px 30px rgba(0,0,0,0.06); }
+    h1 { color:#2e7d32; margin-bottom:12px; }
+    .grid { display:grid; grid-template-columns: 1fr 360px; gap:18px; align-items:start; }
+    .card { background:#fafafa; padding:12px; border-radius:8px; border:1px solid #eee; }
+    .cart-item { display:flex; gap:10px; align-items:center; margin-bottom:10px; }
+    .cart-item img{width:72px;height:72px;object-fit:cover;border-radius:6px;}
+    .cart-item .meta{flex:1;}
+    .cart-item .meta h4{margin:0;font-size:1rem;}
+    .cart-item .meta p{margin:4px 0;color:#666;font-size:0.9rem;}
+    .summary { font-weight:700; display:flex; justify-content:space-between; margin-top:8px; }
+    .btn { background:#2e7d32; color:#fff; border:none; padding:10px 14px; border-radius:8px; cursor:pointer; font-weight:700; width:100%; }
+    .btn:disabled { opacity:0.6; cursor:not-allowed; }
+    .small { font-size:0.9rem; color:#666; }
+    .field { display:flex; flex-direction:column; gap:6px; margin-bottom:10px; }
+    label{ font-weight:600; color:#444; }
+    input, textarea{ padding:8px; border-radius:6px; border:1px solid #ddd; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Confirm Your Order</h1>
+    <div class="grid">
+      <div>
+        <div class="card">
+          <h3>Your items</h3>
+          <div id="itemsList"></div>
+          <div class="summary"><span>Total</span><span id="totalAmount">₹0.00</span></div>
+        </div>
+
+        <div class="card" style="margin-top:12px;">
+          <h3>Delivery Details</h3>
+          <div id="buyerInfo"></div>
+          <div style="margin-top:8px;">
+            <label>Delivery Instructions (optional)</label>
+            <textarea id="instructions" rows="3" placeholder="Example: Leave at gate..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <aside class="card">
+        <h3>Payment & Place Order</h3>
+        <p class="small">Orders will be created and sent to the farmer(s). Delivery assignment will be handled by the backend.</p>
+        <div style="margin-top:12px;">
+          <button id="placeOrderBtn" class="btn">Place Order</button>
+          <button id="backBtn" class="btn" style="margin-top:10px;background:#ccc;color:#222;">Back to Marketplace</button>
+        </div>
+        <div id="statusMsg" style="margin-top:12px;color:#333;"></div>
+      </aside>
+    </div>
+  </div>
+
+<script>
+  // Load cart and user
+  const userProfile = JSON.parse(localStorage.getItem('userProfile'));
+  if (!userProfile) {
+    alert("Please login first.");
+    window.location.href = "login.html";
+  }
+
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const itemsList = document.getElementById('itemsList');
+  const totalAmount = document.getElementById('totalAmount');
+  const buyerInfo = document.getElementById('buyerInfo');
+  const placeOrderBtn = document.getElementById('placeOrderBtn');
+  const backBtn = document.getElementById('backBtn');
+  const statusMsg = document.getElementById('statusMsg');
+
+  function renderCartSummary() {
+    itemsList.innerHTML = '';
+    let total = 0;
+    if (cart.length === 0) {
+      itemsList.innerHTML = '<p style="color:#777">No items in cart. Add products first.</p>';
+      placeOrderBtn.disabled = true;
+    } else {
+      cart.forEach(it => {
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = `
+          <img src="${it.image || 'images/default_product.png'}" alt="${it.name}">
+          <div class="meta">
+            <h4>${it.name}</h4>
+            <p class="small">₹${Number(it.price).toFixed(2)} x ${it.quantity} — Farmer ID: ${it.farmer_id || '-'}</p>
+          </div>
+          <div style="font-weight:700">₹${(Number(it.price)*it.quantity).toFixed(2)}</div>
+        `;
+        itemsList.appendChild(div);
+        total += Number(it.price) * it.quantity;
+      });
+      placeOrderBtn.disabled = false;
+    }
+    totalAmount.textContent = `₹${total.toFixed(2)}`;
+  }
+
+  function renderBuyer() {
+    buyerInfo.innerHTML = `
+      <div class="field"><label>Name</label><div>${userProfile.fullName || ''}</div></div>
+      <div class="field"><label>Email</label><div>${userProfile.email || ''}</div></div>
+      <div class="field"><label>Contact</label><div>${userProfile.contact || ''}</div></div>
+      <div class="field"><label>Location</label><div>${userProfile.location || ''} / ${userProfile.pincode || ''}</div></div>
+    `;
+  }
+
+  renderCartSummary();
+  renderBuyer();
+
+  backBtn.addEventListener('click', () => { window.location.href = 'marketplace.html'; });
+
+  placeOrderBtn.addEventListener('click', async () => {
+    if (!confirm("Place the order now?")) return;
+    placeOrderBtn.disabled = true;
+    statusMsg.textContent = "Placing order...";
+
+    const payload = {
+      user_id: userProfile.id,
+      total: parseFloat(totalAmount.textContent.replace(/[^\d.-]/g,'')),
+      instructions: document.getElementById('instructions').value || '',
+      items: cart.map(i => ({
+        product_id: i.id,
+        quantity: i.quantity,
+        price: Number(i.price)
+      }))
+    };
+
+    try {const res = await fetch('http://localhost:5000/api/orders/create', {
+
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        // success
+        localStorage.removeItem('cart'); // clear cart
+        statusMsg.style.color = 'green';
+        statusMsg.textContent = 'Order placed successfully! Redirecting...';
+        // optionally store order info for confirmation page
+        localStorage.setItem('lastOrder', JSON.stringify({ orderId: data.orderId || data.id || null, total: payload.total }));
+        setTimeout(()=> window.location.href = 'order-confirmation.html', 900);
+      } else {
+        // server returned error
+        statusMsg.style.color = 'crimson';
+        statusMsg.textContent = data.error || 'Server error placing order';
+        placeOrderBtn.disabled = false;
+      }
+    } catch (err) {
+      console.error(err);
+      // fallback: simulate success if backend not ready (remove if you don't want)
+      statusMsg.style.color = 'orange';
+      statusMsg.textContent = 'Could not reach server. Simulating local success for testing...';
+      localStorage.removeItem('cart');
+      localStorage.setItem('lastOrder', JSON.stringify({ orderId: 'LOCAL-' + Date.now(), total: payload.total }));
+      setTimeout(()=> window.location.href = 'order-confirmation.html', 900);
+    }
+  });
+</script>
+</body>
+</html>

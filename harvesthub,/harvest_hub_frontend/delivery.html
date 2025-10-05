@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Delivery Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    body { font-family:Poppins, sans-serif; background:#f4f6f9; margin:0; padding:18px; }
+    .card { background:#fff; padding:16px; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.06); margin-bottom:12px; }
+    table { width:100%; border-collapse:collapse; }
+    th, td { padding:8px; border-bottom:1px solid #eee; text-align:left; vertical-align: top; }
+    select, button { padding:6px 8px; border-radius:6px; border:1px solid #ddd; }
+  </style>
+</head>
+<body>
+  <h2>Delivery Dashboard (Agent ID: 2)</h2>
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Task ID</th>
+          <th>Order</th>
+          <th>Pickup</th>
+          <th>Delivery</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="tasksBody"></tbody>
+    </table>
+  </div>
+
+  <script>
+    const AGENT_ID = 2;
+
+    async function loadTasks() {
+      try {
+        const res = await fetch(`http://localhost:5000/api/delivery/tasks/${AGENT_ID}`);
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        const tasks = await res.json();
+
+        const tbody = document.getElementById('tasksBody');
+        tbody.innerHTML = '';
+
+        if (!tasks.length) {
+          tbody.innerHTML = '<tr><td colspan="6">No tasks assigned</td></tr>';
+          return;
+        }
+
+        tasks.forEach(t => {
+          const tr = document.createElement('tr');
+
+          tr.innerHTML = `
+            <td>${t.id}</td>
+            <td>#${t.order_id} (User ${t.user_id || '-'})</td>
+            <td>
+              ${t.pickup_name || '-'}<br>
+              ${t.pickup_contact || '-'}<br>
+              ${t.pickup_location || '-'} / ${t.pickup_pincode || '-'}
+            </td>
+            <td>
+              ${t.delivery_name || '-'}<br>
+              ${t.delivery_contact || '-'}<br>
+              ${t.delivery_location || '-'} / ${t.delivery_pincode || '-'}
+            </td>
+            <td>${t.status}</td>
+            <td>
+              <select id="s-${t.id}">
+                <option value="">--</option>
+                <option value="Assigned">Assigned</option>
+                <option value="Picked Up">Picked Up</option>
+                <option value="In Transit">In Transit</option>
+                <option value="Delivered">Delivered</option>
+              </select>
+              <button onclick="updateStatus(${t.id})">Update</button>
+            </td>
+          `;
+
+          tbody.appendChild(tr);
+        });
+
+      } catch (err) {
+        console.error('Failed to load tasks from server:', err);
+        const tbody = document.getElementById('tasksBody');
+        tbody.innerHTML = '<tr><td colspan="6" style="color:red;">Failed to load tasks from server</td></tr>';
+      }
+    }
+
+    async function updateStatus(taskId) {
+      const sel = document.getElementById('s-' + taskId);
+      const newStatus = sel.value;
+      if (!newStatus) return alert('Please select a status');
+
+      try {
+        const res = await fetch(`http://localhost:5000/api/delivery/update/${taskId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: newStatus })
+        });
+
+        const data = await res.json();
+        if (res.ok) {
+          alert(data.message || 'Status updated successfully');
+          loadTasks();
+        } else {
+          alert(data.message || 'Update failed');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Update failed due to network error');
+      }
+    }
+
+    loadTasks();
+  </script>
+</body>
+</html>

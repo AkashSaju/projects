@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Order Confirmed - HarvestHub</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;background:#f5f5f5;margin:0;padding:30px}
+    .box{max-width:600px;margin:40px auto;background:#fff;padding:24px;border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,0.06);}
+    h1{color:#2e7d32}
+    .muted{color:#666}
+    .btn{display:inline-block;padding:10px 14px;background:#2e7d32;color:#fff;border-radius:8px;text-decoration:none;margin-top:12px}
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>Thanks — Your order is placed!</h1>
+    <p class="muted" id="orderInfo">Order details will be emailed / available in your orders page.</p>
+    <a href="marketplace.html" class="btn">Back to Marketplace</a>
+  </div>
+
+<script>
+  const last = JSON.parse(localStorage.getItem('lastOrder')||'null');
+  if (last) {
+    document.getElementById('orderInfo').textContent = `Order ID: ${last.orderId || '-'} • Total: ₹${(last.total||0).toFixed(2)}`;
+  }
+</script>
+</body>
+</html>

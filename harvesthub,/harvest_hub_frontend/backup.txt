@@ -1,0 +1,3992 @@
+profile.....
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - HarvestHub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2e7d32;
+            --secondary-color: #dcedc8;
+            --text-color: #333;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --header-bg: rgba(255, 255, 255, 0.85);
+            --red-flag: #e53935;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(rgba(240, 245, 230, 0.9), rgba(240, 245, 230, 0.9)), url('images/market_bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: var(--text-color);
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .profile-container {
+            display: flex;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 1200px;
+            min-height: 80vh;
+        }
+
+        .profile-sidebar {
+            flex: 0 0 280px;
+            padding: 2rem;
+            background-color: var(--secondary-color);
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px;
+            text-align: center;
+        }
+
+        .profile-pic {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .profile-sidebar h2 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0.25rem;
+        }
+
+        .profile-sidebar p {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .profile-nav {
+            list-style: none;
+            text-align: left;
+        }
+
+        .profile-nav li {
+            margin-bottom: 1rem;
+        }
+
+        .profile-nav a {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: var(--text-color);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .profile-nav a:hover, .profile-nav a.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .profile-content {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        .profile-content h1 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+
+        .info-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .info-group label {
+            display: block;
+            font-weight: 500;
+            color: #666;
+            margin-bottom: 0.25rem;
+        }
+
+        .info-group span {
+            display: block;
+            font-size: 1rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .history-list {
+            list-style: none;
+        }
+        
+        .history-item {
+            padding: 1rem;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .history-item.auction {
+            background-color: #fff9e6;
+        }
+
+        .history-item.purchase {
+            background-color: #f0fdf4;
+        }
+
+        .logout-btn {
+            background-color: var(--red-flag);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <aside class="profile-sidebar">
+            <img src="images/user_profile.jpg" alt="User Profile Picture" class="profile-pic">
+            <h2 id="profile-name">Akash</h2>
+            <p id="profile-location">Bengaluru, Karnataka</p>
+            <ul class="profile-nav">
+                <li><a href="#" class="active" data-section="overview"><i class="fas fa-user-circle"></i> Profile Overview</a></li>
+                <li><a href="#" data-section="info"><i class="fas fa-info-circle"></i> Account Information</a></li>
+                <li><a href="#" data-section="history"><i class="fas fa-history"></i> Purchase & Auction History</a></li>
+                <li><a href="#" data-section="settings"><i class="fas fa-cog"></i> Account Settings</a></li>
+            </ul>
+        </aside>
+
+        <main class="profile-content">
+            <div id="overview" class="profile-section active">
+                <h1>Profile Overview</h1>
+                <p>Welcome to your personal dashboard. Here you can see a summary of your activity.</p>
+                </div>
+
+            <div id="info" class="profile-section" style="display: none;">
+                <h1>Account Information</h1>
+                <div class="info-group">
+                    <label>User Type</label>
+                    <span id="user-type">Farmer</span>
+                </div>
+                <div class="info-group">
+                    <label>Full Name</label>
+                    <span id="user-name">Akash</span>
+                </div>
+                <div class="info-group">
+                    <label>Email</label>
+                    <span id="user-email">akash.k@email.com</span>
+                </div>
+                <div class="info-group">
+                    <label>Contact Number</label>
+                    <span id="user-contact">9876543210</span>
+                </div>
+                <div class="info-group">
+                    <label>Location (Pincode)</label>
+                    <span id="user-pincode">560001</span>
+                </div>
+                <div class="info-group">
+                    <label>Detected Location</label>
+                    <span id="user-autofill-location">Bengaluru, Karnataka</span>
+                </div>
+                <div class="info-group">
+                    <label>Date of Birth</label>
+                    <span id="user-dob">1995-08-01</span>
+                </div>
+
+                <div id="farmer-info" style="display: block;">
+                    <div class="info-group">
+                        <label>Farm Name</label>
+                        <span id="farm-name">Green Valley Farms</span>
+                    </div>
+                    <div class="info-group">
+                        <label>Farm Location</label>
+                        <span id="farm-location">Outskirts of Bengaluru</span>
+                    </div>
+                    <div class="info-group">
+                        <label>Farm Description</label>
+                        <span id="farm-description">Family-owned farm specializing in organic produce.</span>
+                    </div>
+                </div>
+                
+                </div>
+
+            <div id="history" class="profile-section" style="display: none;">
+                <h1>Purchase & Auction History</h1>
+                <ul class="history-list">
+                    <li class="history-item purchase">
+                        <div>
+                            <strong>Tomatoes</strong> - ₹50/kg
+                            <p>Purchased on: July 28, 2025</p>
+                        </div>
+                    </li>
+                    <li class="history-item auction">
+                        <div>
+                            <strong>Organic Vegetable Box</strong> - Bid: ₹350
+                            <p>Auction on: July 25, 2025</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div id="settings" class="profile-section" style="display: none;">
+                <h1>Account Settings</h1>
+                <p>Manage your account preferences.</p>
+                <button class="buy-btn" onclick="alert('Password change functionality would be here.')">Change Password</button>
+                <button class="logout-btn" onclick="alert('You have been logged out.')">Log Out</button>
+            </div>
+        </main>
+    </div>
+
+   <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const navLinks = document.querySelectorAll('.profile-nav a');
+    const sections = document.querySelectorAll('.profile-section');
+
+    // Navigation click handler
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            navLinks.forEach(nav => nav.classList.remove('active'));
+            sections.forEach(section => section.style.display = 'none');
+
+            const sectionId = link.dataset.section;
+            link.classList.add('active');
+            document.getElementById(sectionId).style.display = 'block';
+        });
+    });
+
+    // Load user profile from localStorage
+    const userProfile = JSON.parse(localStorage.getItem('userProfile'));
+    if (!userProfile) {
+        alert("⚠️ No logged-in user found. Redirecting to login page.");
+        window.location.href = "login.html";
+        return;
+    }
+
+    // Update sidebar
+    document.getElementById('profile-name').textContent = userProfile.fullName || "User";
+    document.getElementById('profile-location').textContent = userProfile.location || "";
+
+    // Update Account Info
+    document.getElementById('user-type').textContent = userProfile.userType || "";
+    document.getElementById('user-name').textContent = userProfile.fullName || "";
+    document.getElementById('user-email').textContent = userProfile.email || "";
+    document.getElementById('user-contact').textContent = userProfile.contact || "";
+    document.getElementById('user-pincode').textContent = userProfile.pincode || "";
+    document.getElementById('user-autofill-location').textContent = userProfile.location || "";
+    document.getElementById('user-dob').textContent = userProfile.dob || "";
+
+    // Farmer-specific info
+    const farmerInfoSection = document.getElementById('farmer-info');
+    if (userProfile.userType === 'farmer') {
+        farmerInfoSection.style.display = 'block';
+        document.getElementById('farm-name').textContent = userProfile.farmName || "";
+        document.getElementById('farm-location').textContent = userProfile.farmLocation || "";
+        document.getElementById('farm-description').textContent = userProfile.farmDescription || "";
+    } else {
+        farmerInfoSection.style.display = 'none';
+    }
+
+    // Logout button
+    const logoutBtn = document.querySelector('.logout-btn');
+    logoutBtn.addEventListener('click', () => {
+        localStorage.removeItem('userProfile');
+        localStorage.removeItem('userId');
+        alert("Logged out successfully!");
+        window.location.href = "login.html";
+    });
+});
+</script>
+
+</body>
+</html>
+
+
+
+
+login 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - HarvestHub</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .login-container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      width: 100%;
+      max-width: 400px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #2e7d32;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      background-color: #2e7d32;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background-color: #1b5e20;
+    }
+    #loginMessage {
+      text-align: center;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <input type="text" id="loginEmail" placeholder="Email or Phone" required>
+      <input type="password" id="loginPassword" placeholder="Password" required>
+      <button type="submit">Login</button>
+      <div id="loginMessage"></div>
+    </form>
+  </div>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const loginForm = document.getElementById("loginForm");
+    const message = document.getElementById("loginMessage");
+
+    loginForm.addEventListener("submit", async function(event) {
+      event.preventDefault();
+
+      const emailOrPhone = document.getElementById("loginEmail").value.trim();
+      const password = document.getElementById("loginPassword").value.trim();
+
+      if (!emailOrPhone || !password) {
+        message.textContent = "All fields are required.";
+        message.style.color = "#ff4444";
+        return;
+      }
+
+      try {
+        const res = await fetch("http://localhost:5000/api/users/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: emailOrPhone, password })
+        });
+
+        const result = await res.json();
+
+        if (res.ok) {
+          localStorage.setItem("userProfile", JSON.stringify(result.user));
+          localStorage.setItem("userId", result.user.id);
+
+          message.textContent = "Login successful! Redirecting...";
+          message.style.color = "#2e7d32";
+
+          setTimeout(() => {
+            window.location.href = "marketplace.html";
+          }, 1500);
+        } else {
+          message.textContent = result.error || "Login failed";
+          message.style.color = "#ff4444";
+        }
+      } catch (err) {
+        console.error("Login error:", err);
+        message.textContent = "Server error! Try again later.";
+        message.style.color = "#ff4444";
+      }
+    });
+  });
+  </script>
+</body>
+</html>
+
+
+marketplace
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HarvestHub Marketplace</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #2e7d32;
+      --secondary-color: #dcedc8;
+      --text-color: #333;
+      --card-bg: rgba(255, 255, 255, 0.95);
+      --header-bg: rgba(255, 255, 255, 0.85);
+      --red-flag: #e53935;
+      --yellow-flag: #fbc02d;
+      --blue-flag: #1976d2;
+      --live-auction-color: #e53935;
+      --upcoming-auction-color: #ff9800;
+      --scheduled-auction-color: #1976d2;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(rgba(240, 245, 230, 0.9), rgba(240, 245, 230, 0.9)), url('images/market_bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: var(--text-color);
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background: var(--header-bg);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo img {
+      height: 45px;
+    }
+
+    .logo h1 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.2rem;
+      color: var(--primary-color);
+      font-weight: 700;
+    }
+    
+    .welcome-message {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--primary-color);
+      flex: 1;
+      text-align: center;
+    }
+
+    .search-bar {
+      flex: 1;
+      margin: 0 2rem;
+      max-width: 500px;
+    }
+
+    .search-bar input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border-radius: 25px;
+      border: 1px solid #ddd;
+      font-size: 1rem;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .search-bar input:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.2);
+    }
+
+    .icons {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .icons .icon-btn {
+      font-size: 1.25rem;
+      cursor: pointer;
+      color: var(--primary-color);
+      transition: transform 0.2s ease, color 0.2s ease;
+      text-decoration: none;
+    }
+
+    .icons .icon-btn:hover {
+      transform: scale(1.1);
+      color: #388e3c;
+    }
+    
+    .icons .logout-btn {
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      background-color: var(--red-flag);
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+    }
+
+    .main-content {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      padding: 1.5rem 2rem;
+    }
+    
+    .auction-banner {
+        flex: 0 1 280px;
+        min-width: 250px;
+        background: var(--card-bg);
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        height: fit-content;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .auction-banner h3 {
+        font-size: 1.5rem;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+
+    .live-auctions-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .auction-card {
+        background-color: var(--auction-card-bg);
+        padding: 0.75rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    .auction-card img {
+        width: 60px;
+        height: 60px;
+        border-radius: 6px;
+        object-fit: cover;
+    }
+
+    .auction-info {
+        flex-grow: 1;
+        overflow: hidden;
+    }
+
+    .auction-info h4 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .auction-info p {
+        font-size: 0.85rem;
+        color: #666;
+        line-height: 1.2;
+    }
+
+    .auction-timer {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: var(--live-auction-color);
+        margin-top: 0.5rem;
+    }
+
+    .auction-bid-btn {
+        background-color: var(--primary-color);
+        color: white;
+        text-decoration: none;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        font-weight: 500;
+        font-size: 0.85rem;
+        transition: background-color 0.2s ease;
+        white-space: nowrap;
+    }
+
+    .auction-bid-btn:hover {
+        background-color: #388e3c;
+    }
+
+    .view-all-auctions {
+        margin-top: 1.5rem;
+        text-align: center;
+        display: block;
+        padding: 0.75rem 1.5rem;
+        background-color: var(--primary-color);
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: background-color 0.2s ease;
+    }
+
+    .view-all-auctions:hover {
+        background-color: #388e3c;
+    }
+    
+    .product-grid-container {
+      flex: 1 1 0%;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+
+    .product-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 1.25rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      position: relative;
+      overflow: visible;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    }
+
+    .product-card img {
+      width: 100%;
+      border-radius: 8px;
+      height: 180px;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .product-card:hover img {
+      transform: scale(1.05);
+    }
+
+    .product-info {
+      margin-top: 1rem;
+      flex-grow: 1;
+    }
+
+    .product-info h4 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      color: var(--text-color);
+    }
+
+    .product-info p {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 0.5rem;
+    }
+
+    .buy-btn {
+      display: block;
+      width: 100%;
+      padding: 0.75rem;
+      background-color: var(--primary-color);
+      color: white;
+      text-align: center;
+      border: none;
+      border-radius: 8px;
+      margin-top: 1rem;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: background-color 0.2s ease;
+    }
+
+    .buy-btn:hover {
+      background-color: #388e3c;
+    }
+
+    .price-leaf-icon {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      z-index: 5;
+    }
+
+    .price-leaf-icon.red { color: var(--red-flag); }
+    .price-leaf-icon.yellow { color: var(--yellow-flag); }
+    .price-leaf-icon.blue { color: var(--blue-flag); }
+
+    .tooltip {
+      visibility: hidden;
+      width: 120px;
+      background-color: var(--text-color);
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px 0;
+      position: absolute;
+      z-index: 10;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -60px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .tooltip::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: var(--text-color) transparent transparent transparent;
+    }
+
+    .price-leaf-icon:hover .tooltip {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .local-harvests-heading {
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--primary-color);
+      display: block;
+      width: 100%;
+    }
+
+    #no-results {
+        text-align: center;
+        padding: 2rem;
+        background: var(--card-bg);
+        border-radius: 12px;
+        font-size: 1.2rem;
+        color: #888;
+        display: none;
+    }
+
+    .filter-sidebar {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 300px;
+      height: 100%;
+      background: var(--card-bg);
+      box-shadow: -4px 0 12px rgba(0,0,0,0.1);
+      transform: translateX(100%);
+      transition: transform 0.3s ease-in-out;
+      z-index: 1010;
+      padding: 2rem;
+      overflow-y: auto;
+    }
+
+    .filter-sidebar.open {
+      transform: translateX(0);
+    }
+    
+    .filter-sidebar .close-btn {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      font-size: 1.5rem;
+      color: #666;
+      cursor: pointer;
+    }
+
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1005;
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0.3s, opacity 0.3s;
+    }
+
+    .overlay.open {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    .cart-sidebar {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 350px;
+        height: 100%;
+        background: var(--card-bg);
+        box-shadow: -4px 0 12px rgba(0,0,0,0.1);
+        transform: translateX(100%);
+        transition: transform 0.3s ease-in-out;
+        z-index: 1010;
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+    }
+    .cart-sidebar.open {
+        transform: translateX(0);
+    }
+    .cart-sidebar h3 {
+        color: var(--primary-color);
+        border-bottom: 2px solid var(--primary-color);
+        padding-bottom: 1rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .cart-sidebar .close-btn {
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+    .cart-items {
+        flex: 1;
+        overflow-y: auto;
+    }
+    .cart-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    .cart-item img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+    .cart-item-details {
+        flex: 1;
+    }
+    .cart-item-details h4 {
+        font-size: 1rem;
+    }
+    .cart-item-details p {
+        color: #666;
+        font-size: 0.9rem;
+    }
+    .cart-item-controls {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .cart-item-controls button {
+        background-color: #f0f0f0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        width: 25px;
+        height: 25px;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+    .cart-summary {
+        border-top: 2px solid #ddd;
+        padding-top: 1rem;
+        margin-top: 1rem;
+    }
+    .cart-summary .total {
+        display: flex;
+        justify-content: space-between;
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+    .checkout-btn {
+        width: 100%;
+        padding: 1rem;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.1rem;
+        cursor: pointer;
+    }
+    #cart-empty-message {
+        text-align: center;
+        color: #888;
+        margin-top: 2rem;
+    }
+    .cart-item-remove {
+      color: var(--red-flag);
+      cursor: pointer;
+      font-size: 1.2rem;
+      margin-left: 0.5rem;
+    }
+    
+    .message-box {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: var(--card-bg);
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        z-index: 1001;
+        display: none;
+        text-align: center;
+    }
+    
+    .message-box.show {
+        display: block;
+    }
+    
+    .message-box h3 {
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+    
+    .message-box p {
+        margin-bottom: 1.5rem;
+    }
+    
+    .message-box button {
+        padding: 0.75rem 1.5rem;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+    footer {
+      background: var(--header-bg);
+      backdrop-filter: blur(10px);
+      text-align: center;
+      padding: 1.5rem;
+      margin-top: 2rem;
+      border-top: 1px solid #eee;
+      color: #666;
+    }
+
+    @media (max-width: 992px) {
+        .main-content {
+            flex-direction: column;
+        }
+        .auction-banner, .product-grid-container {
+            flex-basis: 100%;
+            min-width: unset;
+        }
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-wrap: wrap;
+        padding: 1rem;
+      }
+      .logo { flex-grow: 1; }
+      .search-bar { order: 3; margin: 1rem 0; width: 100%; }
+      .icons { order: 2; }
+      .main-content {
+        padding: 1rem;
+      }
+      .product-grid { gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="images/bglogo.png" alt="Harvest Hub Logo">
+      <h1>HarvestHub</h1>
+    </div>
+    <!-- This will be dynamic based on login status -->
+    <span class="welcome-message" id="welcomeMsg">Welcome to the Marketplace!</span>
+    <div class="search-bar">
+      <input type="text" placeholder="Search for products or farms..." id="searchInput">
+    </div>
+    <div class="icons">
+      <a href="auctions.html" class="icon-btn" title="Auctions"><i class="fas fa-gavel"></i></a>
+      <span class="icon-btn" id="filter-btn" title="Filters"><i class="fas fa-filter"></i></span>
+      <span class="icon-btn" id="fav-btn" title="Favorites"><i class="fas fa-heart"></i></span>
+      <span class="icon-btn" id="cart-btn" title="Cart"><i class="fas fa-shopping-cart"></i></span>
+      <a href="user-profile.html" class="icon-btn" id="profile-btn" title="Profile"><i class="fas fa-user-circle"></i></a>
+      <a href="intex.html" class="logout-btn" id="logout-btn">Log Out</a>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <aside class="auction-banner">
+      <h3>Live Auctions</h3>
+      <div id="live-auctions-list" class="live-auctions-list">
+        <!-- Live auction items will be injected here by JavaScript -->
+      </div>
+      <a href="auctions.html" class="view-all-auctions">View all Auctions</a>
+    </aside>
+
+    <div class="product-grid-container">
+      <span class="local-harvests-heading" id="local-harvests-heading">Local Harvests</span>
+      <div id="no-results">No products found. Try adjusting your search or filters.</div>
+      <div class="product-grid" id="productGrid">
+        <div class="product-card" data-id="1" data-name="Tomatoes" data-price="50" data-organic="false" data-in-stock="true" data-image="images/tomato.jpg" data-farm="Green Valley Farm">
+          <span class="price-leaf-icon red">
+            <i class="fas fa-leaf"></i>
+            <span class="tooltip">Overpriced</span>
+          </span>
+          <img src="images/tomato.jpg" alt="Tomatoes">
+          <div class="product-info">
+            <h4>Tomatoes - ₹50/kg</h4>
+            <p>From Green Valley Farm</p>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-id="2" data-name="Carrots" data-price="30" data-organic="true" data-in-stock="true" data-image="images/carrots.jpg" data-farm="Sunrise Farm">
+          <span class="price-leaf-icon blue">
+            <i class="fas fa-leaf"></i>
+            <span class="tooltip">Great Price</span>
+          </span>
+          <img src="images/carrots.jpg" alt="Carrots">
+          <div class="product-info">
+            <h4>Carrots - ₹30/kg</h4>
+            <p>From Sunrise Farm</p>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-id="3" data-name="Potatoes" data-price="35" data-organic="false" data-in-stock="true" data-image="images/potatoes.jpg" data-farm="Riverbend Farm">
+          <span class="price-leaf-icon yellow">
+            <i class="fas fa-leaf"></i>
+            <span class="tooltip">Normal Price</span>
+          </span>
+          <img src="images/potatoes.jpg" alt="Potatoes">
+          <div class="product-info">
+            <h4>Potatoes - ₹35/kg</h4>
+            <p>From Riverbend Farm</p>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-id="4" data-name="Spinach" data-price="25" data-organic="true" data-in-stock="true" data-image="images/spinach.jpg" data-farm="Meadow Creek Farm">
+          <span class="price-leaf-icon blue">
+            <i class="fas fa-leaf"></i>
+            <span class="tooltip">Great Price</span>
+          </span>
+          <img src="images/spinach.jpg" alt="Spinach">
+          <div class="product-info">
+            <h4>Fresh Spinach - ₹25/bunch</h4>
+            <p>From Meadow Creek Farm</p>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-id="5" data-name="Eggs" data-price="80" data-organic="true" data-in-stock="true" data-image="images/eggs.jpg" data-farm="Happy Hen Farms">
+          <span class="price-leaf-icon yellow">
+            <i class="fas fa-leaf"></i>
+            <span class="tooltip">Normal Price</span>
+          </span>
+          <img src="images/eggs.jpg" alt="Eggs">
+          <div class="product-info">
+            <h4>Organic Eggs - ₹80/dozen</h4>
+            <p>From Happy Hen Farms</p>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-id="6" data-name="Milk" data-price="45" data-organic="false" data-in-stock="false" data-image="images/milk.jpg" data-farm="The Dairy Barn">
+          <span class="price-leaf-icon red">
+            <i class="fas fa-leaf"></i>
+            <span class="tooltip">Overpriced</span>
+          </span>
+          <img src="images/milk.jpg" alt="Milk">
+          <div class="product-info">
+            <h4>Farm Fresh Milk - ₹45/liter</h4>
+            <p>From The Dairy Barn</p>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-id="7" data-name="Mangoes" data-price="120" data-organic="false" data-in-stock="true" data-image="images/mangoes.jpg" data-farm="Sun Valley Orchards">
+          <span class="price-leaf-icon blue">
+            <i class="fas fa-leaf"></i>
+            <span class="tooltip">Great Price</span>
+          </span>
+          <img src="images/mangoes.jpg" alt="Mangoes">
+          <div class="product-info">
+            <h4>Ripe Mangoes - ₹120/kg</h4>
+            <p>From Sun Valley Orchards</p>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-id="8" data-name="Bell Peppers" data-price="60" data-organic="true" data-in-stock="true" data-image="images/peppers.jpg" data-farm="Valley Greens">
+          <span class="price-leaf-icon yellow">
+            <i class="fas fa-leaf"></i>
+            <span class="tooltip">Normal Price</span>
+          </span>
+          <img src="images/peppers.jpg" alt="Bell Peppers">
+          <div class="product-info">
+            <h4>Bell Peppers - ₹60/kg</h4>
+            <p>From Valley Greens</p>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-id="9" data-name="Apples" data-price="150" data-organic="false" data-in-stock="true" data-image="images/apples.jpg" data-farm="Mountain Grove Orchards">
+          <span class="price-leaf-icon blue">
+            <i class="fas fa-leaf"></i>
+            <span class="tooltip">Great Price</span>
+          </span>
+          <img src="images/apples.jpg" alt="Fresh Apples">
+          <div class="product-info">
+            <h4>Fresh Apples - ₹150/kg</h4>
+            <p>From Mountain Grove Orchards</p>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-id="10" data-name="Artisan Bread" data-price="100" data-organic="true" data-in-stock="true" data-image="images/bread.jpg" data-farm="The Baker's Shelf">
+          <span class="price-leaf-icon red">
+            <i class="fas fa-leaf"></i>
+            <span class="tooltip">Overpriced</span>
+          </span>
+          <img src="images/bread.jpg" alt="Artisan Bread">
+          <div class="product-info">
+            <h4>Artisan Bread - ₹100/loaf</h4>
+            <p>From The Baker's Shelf</p>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-id="11" data-name="Local Cheese" data-price="250" data-organic="false" data-in-stock="true" data-image="images/cheese.jpg" data-farm="The Dairy Barn">
+          <span class="price-leaf-icon yellow">
+            <i class="fas fa-leaf"></i>
+            <span class="tooltip">Normal Price</span>
+          </span>
+          <img src="images/cheese.jpg" alt="Local Cheese">
+          <div class="product-info">
+            <h4>Local Cheese - ₹250/200g</h4>
+            <p>From The Dairy Barn</p>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-id="12" data-name="Cucumbers" data-price="40" data-organic="true" data-in-stock="true" data-image="images/cucumbers.jpg" data-farm="Sunset Farms">
+          <span class="price-leaf-icon blue">
+            <i class="fas fa-leaf"></i>
+            <span class="tooltip">Great Price</span>
+          </span>
+          <img src="images/cucumbers.jpg" alt="Cucumbers">
+          <div class="product-info">
+            <h4>Cucumbers - ₹40/kg</h4>
+            <p>From Sunset Farms</p>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-id="13" data-name="Green Beans" data-price="65" data-organic="false" data-in-stock="false" data-image="images/greenbeans.jpg" data-farm="The Farmers' Plot">
+          <span class="price-leaf-icon red">
+            <i class="fas fa-leaf"></i>
+            <span class="tooltip">Overpriced</span>
+          </span>
+          <img src="images/greenbeans.jpg" alt="Green Beans">
+          <div class="product-info">
+            <h4>Green Beans - ₹65/kg</h4>
+            <p>From The Farmers' Plot</p>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="filter-sidebar" class="filter-sidebar">
+    <span class="close-btn" id="close-filter-btn"><i class="fas fa-times"></i></span>
+    <h3>Filters</h3>
+    <div class="filter-group">
+      <label>Price Range: <span id="price-value">500</span></label><br>
+      <input type="range" id="price-range" min="0" max="500" value="500">
+    </div>
+    <div class="filter-group">
+      <label><input type="checkbox" id="organic-filter"> Organic Only</label><br>
+      <label><input type="checkbox" id="in-stock-filter"> In Stock</label>
+    </div>
+    <div class="filter-group sort-section">
+      <label>Sort By</label>
+      <select id="sort-by">
+        <option value="default">Default</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="cart-sidebar" class="cart-sidebar">
+    <h3>Shopping Cart <span class="close-btn" id="close-cart-btn"><i class="fas fa-times"></i></span></h3>
+    <div class="cart-items" id="cart-items-container">
+      <p id="cart-empty-message">Your cart is empty.</p>
+    </div>
+    <div class="cart-summary">
+      <div class="total">
+        <span>Total:</span>
+        <span id="cart-total">₹0</span>
+      </div>
+      <button class="checkout-btn" onclick="window.location.href='checkout.html'">Checkout</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+
+  <div id="message-box" class="message-box">
+    <h3 id="message-title"></h3>
+    <p id="message-text"></p>
+    <button id="message-close">OK</button>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 HarvestHub. All rights reserved.</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+    // These are dummy values to simulate a logged-in user.
+    const userProfile = JSON.parse(localStorage.getItem('userProfile')) || {
+        name: 'Guest',
+        location: 'Your Location'
+    };
+
+    // Update the header with user-specific data
+    document.getElementById('welcomeMsg').textContent = `Welcome, ${userProfile.name}!`;
+    document.getElementById('local-harvests-heading').textContent = `Local Harvests in ${userProfile.location}`;
+
+    const searchInput = document.getElementById('searchInput');
+    const productGrid = document.querySelector('.product-grid');
+    const productCards = document.querySelectorAll('.product-card');
+    const noResultsMsg = document.getElementById('no-results');
+    const filterBtn = document.getElementById('filter-btn');
+    const filterSidebar = document.getElementById('filter-sidebar');
+    const closeFilterBtn = document.getElementById('close-filter-btn');
+    const cartBtn = document.getElementById('cart-btn');
+    const cartSidebar = document.getElementById('cart-sidebar');
+    const closeCartBtn = document.getElementById('close-cart-btn');
+    const overlay = document.getElementById('overlay');
+    const buyBtns = document.querySelectorAll('.product-card .buy-btn');
+
+    const priceRange = document.getElementById('price-range');
+    const priceValueSpan = document.getElementById('price-value');
+    const organicFilter = document.getElementById('organic-filter');
+    const inStockFilter = document.getElementById('in-stock-filter');
+    const sortBy = document.getElementById('sort-by');
+
+    const cartItemsContainer = document.getElementById('cart-items-container');
+    const cartTotalSpan = document.getElementById('cart-total');
+    const cartEmptyMessage = document.getElementById('cart-empty-message');
+
+    const logoutBtn = document.getElementById('logout-btn');
+
+    const messageBox = document.getElementById('message-box');
+    const messageTitle = document.getElementById('message-title');
+    const messageText = document.getElementById('message-text');
+    const messageCloseBtn = document.getElementById('message-close');
+
+    const liveAuctionsList = document.getElementById('live-auctions-list');
+
+    // Dummy data for live auctions
+    const liveAuctions = [{
+            id: 'a1',
+            name: 'Freshly Picked Apples',
+            image: 'images/apples.jpg',
+            currentBid: 150,
+            endTime: Date.now() + 1000 * 60 * 30 // 30 minutes from now
+        },
+        {
+            id: 'a2',
+            name: 'Organic Cherry Tomatoes',
+            image: 'images/tomato.jpg',
+            currentBid: 75,
+            endTime: Date.now() + 1000 * 60 * 60 * 2 // 2 hours from now
+        },
+        {
+            id: 'a3',
+            name: 'Heirloom Carrots (5kg)',
+            image: 'images/carrots.jpg',
+            currentBid: 120,
+            endTime: Date.now() + 1000 * 60 * 60 * 4 // 4 hours from now
+        },
+    ];
+
+    // Get logged-in user info from localStorage
+    const userProfile = JSON.parse(localStorage.getItem("userProfile"));
+
+    if (userProfile) {
+      // Show welcome message
+      document.getElementById("welcomeMsg").textContent = `Welcome, ${userProfile.fullName}!`;
+
+      // Redirect to profile page when clicking "My Profile"
+      document.getElementById("profileBtn").addEventListener("click", () => {
+        window.location.href = "profile.html"; // open profile page
+      });
+    } else {
+      // If no user info, redirect to login
+      window.location.href = "login.html";
+    }
+
+    // Function to render live auctions
+    const renderLiveAuctions = () => {
+        liveAuctionsList.innerHTML = ''; // Clear existing list
+        liveAuctions.forEach(auction => {
+            const auctionCard = document.createElement('div');
+            auctionCard.classList.add('auction-card');
+            auctionCard.innerHTML = `
+                <img src="${auction.image}" alt="${auction.name}">
+                <div class="auction-info">
+                    <h4>${auction.name}</h4>
+                    <p>Current Bid: ₹${auction.currentBid}</p>
+                    <div class="auction-timer" data-endtime="${auction.endTime}" data-id="${auction.id}">Loading...</div>
+                </div>
+                <a href="#" class="auction-bid-btn">Bid Now</a>
+            `;
+            liveAuctionsList.appendChild(auctionCard);
+        });
+    };
+
+    // Function to update countdown timers
+    const updateTimers = () => {
+        const timers = document.querySelectorAll('.auction-timer');
+        timers.forEach(timer => {
+            const endTime = parseInt(timer.dataset.endtime, 10);
+            const now = Date.now();
+            const timeLeft = endTime - now;
+
+            if (timeLeft > 0) {
+                const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                timer.textContent = `${hours}h ${minutes}m ${seconds}s`;
+            } else {
+                timer.textContent = 'Auction Ended';
+                timer.style.color = '#666';
+            }
+        });
+    };
+
+    // Initial render and interval for timers
+    renderLiveAuctions();
+    setInterval(updateTimers, 1000);
+
+
+    // Function to show a custom message box
+    function showMessage(title, text, onConfirm = () => {}) {
+        messageTitle.textContent = title;
+        messageText.textContent = text;
+        messageBox.classList.add('show');
+        overlay.classList.add('open');
+
+        const closeHandler = () => {
+            messageBox.classList.remove('show');
+            overlay.classList.remove('open');
+            messageCloseBtn.removeEventListener('click', closeHandler);
+            onConfirm();
+        };
+
+        messageCloseBtn.addEventListener('click', closeHandler);
+    }
+
+    // --- Filter and Search Logic ---
+    const applyFilters = () => {
+        const searchText = searchInput.value.toLowerCase();
+        const maxPrice = parseInt(priceRange.value, 10);
+        const isOrganic = organicFilter.checked;
+        const isInStock = inStockFilter.checked;
+        let visibleCount = 0;
+
+        productCards.forEach(card => {
+            const productName = card.dataset.name.toLowerCase();
+            const productFarm = card.dataset.farm.toLowerCase();
+            const productPrice = parseInt(card.dataset.price, 10);
+            const productIsOrganic = card.dataset.organic === 'true';
+            const productIsInStock = card.dataset.inStock === 'true'; // Corrected attribute name
+
+            const matchesSearch = productName.includes(searchText) || productFarm.includes(searchText);
+            const matchesPrice = productPrice <= maxPrice;
+            const matchesOrganic = !isOrganic || productIsOrganic;
+            const matchesInStock = !isInStock || productIsInStock;
+
+            if (matchesSearch && matchesPrice && matchesOrganic && matchesInStock) {
+                card.style.display = 'flex';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        noResultsMsg.style.display = visibleCount === 0 ? 'block' : 'none';
+    };
+
+    const sortProducts = () => {
+        const productsArray = Array.from(productCards);
+        const sortValue = sortBy.value;
+
+        if (sortValue === 'default') {
+            productGrid.innerHTML = '';
+            productsArray.forEach(card => productGrid.appendChild(card));
+            return;
+        }
+
+        productsArray.sort((a, b) => {
+            const priceA = parseInt(a.dataset.price, 10);
+            const priceB = parseInt(b.dataset.price, 10);
+
+            if (sortValue === 'price-asc') {
+                return priceA - priceB;
+            } else if (sortValue === 'price-desc') {
+                return priceB - priceA;
+            }
+        });
+
+        // Clear the grid and append the sorted cards
+        productGrid.innerHTML = '';
+        productsArray.forEach(card => productGrid.appendChild(card));
+    };
+
+    // Event listeners for filters and search
+    searchInput.addEventListener('keyup', () => {
+        applyFilters();
+        sortProducts();
+    });
+    priceRange.addEventListener('input', () => {
+        priceValueSpan.textContent = priceRange.value;
+        applyFilters();
+        sortProducts();
+    });
+    organicFilter.addEventListener('change', () => {
+        applyFilters();
+        sortProducts();
+    });
+    inStockFilter.addEventListener('change', () => {
+        applyFilters();
+        sortProducts();
+    });
+    sortBy.addEventListener('change', () => {
+        applyFilters();
+        sortProducts();
+    });
+
+    // --- Sidebar Toggles ---
+    filterBtn.addEventListener('click', () => {
+        filterSidebar.classList.add('open');
+        overlay.classList.add('open');
+    });
+    closeFilterBtn.addEventListener('click', () => {
+        filterSidebar.classList.remove('open');
+        overlay.classList.remove('open');
+    });
+    cartBtn.addEventListener('click', () => {
+        cartSidebar.classList.add('open');
+        overlay.classList.add('open');
+    });
+    closeCartBtn.addEventListener('click', () => {
+        cartSidebar.classList.remove('open');
+        overlay.classList.remove('open');
+    });
+    overlay.addEventListener('click', () => {
+        filterSidebar.classList.remove('open');
+        cartSidebar.classList.remove('open');
+        overlay.classList.remove('open');
+    });
+
+    // --- Cart Functionality ---
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    const saveCart = () => {
+        localStorage.setItem('cart', JSON.stringify(cart));
+    };
+
+    const renderCart = () => {
+        cartItemsContainer.innerHTML = '';
+        let total = 0;
+
+        if (cart.length === 0) {
+            cartEmptyMessage.style.display = 'block';
+        } else {
+            cartEmptyMessage.style.display = 'none';
+            cart.forEach(item => {
+                const cartItem = document.createElement('div');
+                cartItem.classList.add('cart-item');
+                cartItem.dataset.id = item.id;
+                cartItem.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}">
+                    <div class="cart-item-details">
+                        <h4>${item.name}</h4>
+                        <p>₹${item.price} per unit</p>
+                    </div>
+                    <div class="cart-item-controls">
+                        <button class="cart-minus-btn">-</button>
+                        <span>${item.quantity}</span>
+                        <button class="cart-plus-btn">+</button>
+                    </div>
+                    <span class="cart-item-remove"><i class="fas fa-times"></i></span>
+                `;
+                cartItemsContainer.appendChild(cartItem);
+                total += item.price * item.quantity;
+            });
+        }
+
+        cartTotalSpan.textContent = `₹${total.toFixed(2)}`;
+    };
+
+    const addToCart = (product) => {
+        const existingItem = cart.find(item => item.id === product.id);
+        if (existingItem) {
+            existingItem.quantity++;
+            showMessage('Item Added', `${product.name} quantity increased to ${existingItem.quantity}.`);
+        } else {
+            cart.push({
+                ...product,
+                quantity: 1
+            });
+            showMessage('Item Added', `${product.name} has been added to your cart.`);
+        }
+        saveCart();
+        renderCart();
+    };
+
+    // Event listener for all "Buy Now" buttons
+    buyBtns.forEach(button => {
+        button.addEventListener('click', (event) => {
+            const card = event.target.closest('.product-card');
+            const product = {
+                id: card.dataset.id,
+                name: card.dataset.name,
+                price: parseInt(card.dataset.price, 10),
+                image: card.querySelector('img').src,
+            };
+            addToCart(product);
+        });
+    });
+
+    // Event delegation for cart controls
+    cartItemsContainer.addEventListener('click', (event) => {
+        const itemElement = event.target.closest('.cart-item');
+        if (!itemElement) return;
+
+        const itemId = itemElement.dataset.id;
+        const item = cart.find(i => i.id === itemId);
+
+        if (event.target.classList.contains('cart-plus-btn')) {
+            item.quantity++;
+        } else if (event.target.classList.contains('cart-minus-btn')) {
+            item.quantity--;
+            if (item.quantity === 0) {
+                cart = cart.filter(i => i.id !== itemId);
+            }
+        } else if (event.target.closest('.cart-item-remove')) {
+            cart = cart.filter(i => i.id !== itemId);
+        }
+
+        saveCart();
+        renderCart();
+    });
+
+    // Initial render of cart on page load
+    renderCart();
+});
+  </script>
+</body>
+</html>
+
+
+
+
+
+new marketplace....
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HarvestHub Marketplace</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #2e7d32;
+      --secondary-color: #dcedc8;
+      --text-color: #333;
+      --card-bg: rgba(255, 255, 255, 0.95);
+      --header-bg: rgba(255, 255, 255, 0.85);
+      --red-flag: #e53935;
+      --yellow-flag: #fbc02d;
+      --blue-flag: #1976d2;
+      --live-auction-color: #e53935;
+      --upcoming-auction-color: #ff9800;
+      --scheduled-auction-color: #1976d2;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(rgba(240, 245, 230, 0.9), rgba(240, 245, 230, 0.9)), url('images/market_bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: var(--text-color);
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background: var(--header-bg);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo img { height: 45px; }
+    .logo h1 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; color: var(--primary-color); font-weight: 700; }
+
+    .welcome-message { font-size: 1.1rem; font-weight: 500; color: var(--primary-color); flex: 1; text-align: center; }
+
+    .search-bar { flex: 1; margin: 0 2rem; max-width: 500px; }
+    .search-bar input { width: 100%; padding: 0.75rem 1rem; border-radius: 25px; border: 1px solid #ddd; font-size: 1rem; transition: box-shadow 0.3s ease; }
+    .search-bar input:focus { outline: none; box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.2); }
+
+    .icons { display: flex; gap: 1.5rem; align-items: center; }
+    .icons .icon-btn { font-size: 1.25rem; cursor: pointer; color: var(--primary-color); transition: transform 0.2s ease, color 0.2s ease; text-decoration: none; }
+    .icons .icon-btn:hover { transform: scale(1.1); color: #388e3c; }
+    .icons .logout-btn { font-size: 0.9rem; font-weight: 500; padding: 0.5rem 1rem; background-color: var(--red-flag); color: white; border-radius: 8px; text-decoration: none; }
+
+    .main-content { display: flex; flex-wrap: wrap; gap: 2rem; padding: 1.5rem 2rem; }
+    .auction-banner { flex: 0 1 280px; min-width: 250px; background: var(--card-bg); border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.08); height: fit-content; display: flex; flex-direction: column; }
+    .auction-banner h3 { font-size: 1.5rem; color: var(--primary-color); margin-bottom: 1rem; text-align: center; }
+    .live-auctions-list { display: flex; flex-direction: column; gap: 1rem; }
+    .auction-card { background-color: var(--card-bg); padding: 0.75rem; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); display: flex; gap: 1rem; align-items: center; }
+    .auction-card img { width: 60px; height: 60px; border-radius: 6px; object-fit: cover; }
+    .auction-info { flex-grow: 1; overflow: hidden; }
+    .auction-info h4 { font-size: 1rem; font-weight: 600; margin-bottom: 0.25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .auction-info p { font-size: 0.85rem; color: #666; line-height: 1.2; }
+    .auction-timer { font-size: 0.9rem; font-weight: 700; color: var(--live-auction-color); margin-top: 0.5rem; }
+    .auction-bid-btn { background-color: var(--primary-color); color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 6px; font-weight: 500; font-size: 0.85rem; transition: background-color 0.2s ease; white-space: nowrap; }
+    .auction-bid-btn:hover { background-color: #388e3c; }
+    .view-all-auctions { margin-top: 1.5rem; text-align: center; display: block; padding: 0.75rem 1.5rem; background-color: var(--primary-color); color: white; text-decoration: none; border-radius: 8px; font-weight: 500; transition: background-color 0.2s ease; }
+    .view-all-auctions:hover { background-color: #388e3c; }
+
+    .product-grid-container { flex: 1 1 0%; min-width: 0; overflow: visible; }
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 2rem; }
+    .product-card { background: var(--card-bg); border-radius: 12px; padding: 1.25rem; box-shadow: 0 4px 12px rgba(0,0,0,0.08); position: relative; overflow: visible; transition: transform 0.3s ease, box-shadow 0.3s ease; display: flex; flex-direction: column; }
+    .product-card:hover { transform: translateY(-5px); box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
+    .product-card img { width: 100%; border-radius: 8px; height: 180px; object-fit: cover; transition: transform 0.3s ease; }
+    .product-card:hover img { transform: scale(1.05); }
+    .product-info { margin-top: 1rem; flex-grow: 1; }
+    .product-info h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.25rem; color: var(--text-color); }
+    .product-info p { font-size: 0.9rem; color: #666; margin-bottom: 0.5rem; }
+    .buy-btn { display: block; width: 100%; padding: 0.75rem; background-color: var(--primary-color); color: white; text-align: center; border: none; border-radius: 8px; margin-top: 1rem; cursor: pointer; font-size: 1rem; font-weight: 500; transition: background-color 0.2s ease; }
+    .buy-btn:hover { background-color: #388e3c; }
+
+    .farmer-info { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; }
+    .farmer-info img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; }
+
+    #no-results { display: none; margin-top: 1rem; font-weight: 500; color: #e53935; text-align: center; }
+
+    @media (max-width: 992px) { .main-content { flex-direction: column; } .auction-banner, .product-grid-container { flex-basis: 100%; min-width: unset; } }
+    @media (max-width: 768px) { header { flex-wrap: wrap; padding: 1rem; } .logo { flex-grow: 1; } .search-bar { order: 3; margin: 1rem 0; width: 100%; } .icons { order: 2; } .main-content { padding: 1rem; } .product-grid { gap: 1rem; } }
+  </style>
+</head>
+<body>
+<header>
+  <div class="logo">
+    <img src="images/bglogo.png" alt="Harvest Hub Logo">
+    <h1>HarvestHub</h1>
+  </div>
+  <span class="welcome-message" id="welcomeMsg">Welcome to the Marketplace!</span>
+  <div class="search-bar">
+    <input type="text" placeholder="Search for products or farms..." id="searchInput">
+  </div>
+  <div class="icons">
+    <a href="auctions.html" class="icon-btn" title="Auctions"><i class="fas fa-gavel"></i></a>
+    <span class="icon-btn" id="filter-btn" title="Filters"><i class="fas fa-filter"></i></span>
+    <span class="icon-btn" id="fav-btn" title="Favorites"><i class="fas fa-heart"></i></span>
+    <span class="icon-btn" id="cart-btn" title="Cart"><i class="fas fa-shopping-cart"></i></span>
+    <a href="user-profile.html" class="icon-btn" id="profile-btn" title="Profile"><i class="fas fa-user-circle"></i></a>
+    <a href="intex.html" class="logout-btn" id="logout-btn">Log Out</a>
+  </div>
+</header>
+
+<main class="main-content">
+  <aside class="auction-banner">
+    <h3>Live Auctions</h3>
+    <div id="live-auctions-list" class="live-auctions-list"></div>
+    <a href="auctions.html" class="view-all-auctions">View all Auctions</a>
+  </aside>
+
+  <div class="product-grid-container">
+    <span class="local-harvests-heading" id="local-harvests-heading">Local Harvests</span>
+    <div class="product-grid" id="productGrid"></div>
+    <div id="no-results">No products found. Try adjusting your search or filters.</div>
+  </div>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const userProfile = JSON.parse(localStorage.getItem('userProfile'));
+  if (!userProfile) window.location.href = "login.html";
+
+  document.getElementById('welcomeMsg').textContent = `Welcome, ${userProfile.fullName || 'Guest'}!`;
+  document.getElementById('local-harvests-heading').textContent = `Local Harvests in ${userProfile.location || 'Your Location'}`;
+
+  const searchInput = document.getElementById('searchInput');
+  const productGrid = document.getElementById("productGrid");
+  const noResultsMsg = document.getElementById('no-results');
+
+  const priceRange = document.getElementById('price-range');
+  const priceValueSpan = document.getElementById('price-value');
+  const organicFilter = document.getElementById('organic-filter');
+  const inStockFilter = document.getElementById('in-stock-filter');
+  const sortBy = document.getElementById('sort-by');
+
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const saveCart = () => localStorage.setItem('cart', JSON.stringify(cart));
+
+  const addToCart = (product) => {
+    const existing = cart.find(i => i.id === product.id);
+    if (existing) existing.quantity++;
+    else cart.push({ ...product, quantity: 1 });
+    saveCart();
+    alert(`${product.name} added to cart!`);
+  };
+
+  let products = [];
+
+  const renderProducts = () => {
+    productGrid.innerHTML = '';
+    let visibleCount = 0;
+
+    products.forEach(p => {
+      const matchesSearch = p.name.toLowerCase().includes(searchInput.value.toLowerCase());
+      const matchesPrice = !priceRange || p.price <= parseInt(priceRange.value || Infinity);
+      const matchesOrganic = !organicFilter || !organicFilter.checked || p.organic;
+      const matchesInStock = !inStockFilter || !inStockFilter.checked || p.quantity > 0;
+
+      if (matchesSearch && matchesPrice && matchesOrganic && matchesInStock) {
+        visibleCount++;
+        const card = document.createElement('div');
+        card.classList.add('product-card');
+        card.innerHTML = `
+          <img src="${p.image_url}" alt="${p.name}">
+
+          <div class="product-info">
+            <h4>${p.name}</h4>
+            <p>₹${p.price}</p>
+            <p>${p.quantity} available</p>
+            <div class="farmer-info">
+              <img src="http://localhost:5000/uploads/${p.farmer_profile || 'default_farm.png'}" alt="${p.farmer_name}">
+              <span>${p.farmer_name}</span>
+            </div>
+          </div>
+          <button class="buy-btn">Buy Now</button>
+        `;
+        productGrid.appendChild(card);
+
+        card.querySelector('.buy-btn').addEventListener('click', () => {
+          addToCart({
+            id: p.id,
+            name: p.name,
+            price: p.price,
+            image: `http://localhost:5000/uploads/${p.image_url}`
+          });
+        });
+      }
+    });
+
+    noResultsMsg.style.display = visibleCount === 0 ? 'block' : 'none';
+  };
+
+  searchInput.addEventListener('input', renderProducts);
+
+  fetch("http://localhost:5000/api/products")
+    .then(res => res.json())
+    .then(data => { products = data; renderProducts(); })
+    .catch(err => console.error(err));
+});
+</script>
+</body>
+</html>
+
+marketplace script befor buynow
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const userProfile = JSON.parse(localStorage.getItem('userProfile'));
+  if (!userProfile) window.location.href = "login.html";
+
+  document.getElementById('welcomeMsg').textContent = `Welcome, ${userProfile.fullName || 'Guest'}!`;
+  document.getElementById('local-harvests-heading').textContent = `Local Harvests in ${userProfile.location || 'Your Location'}`;
+
+  const searchInput = document.getElementById('searchInput');
+  const productGrid = document.getElementById("productGrid");
+  const noResultsMsg = document.getElementById('no-results');
+
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const saveCart = () => localStorage.setItem('cart', JSON.stringify(cart));
+
+  const addToCart = (product) => {
+    const existing = cart.find(i => i.id === product.id);
+    if (existing) existing.quantity++;
+    else cart.push({ ...product, quantity: 1 });
+    saveCart();
+    alert(`${product.name} added to cart!`);
+  };
+
+  let products = [];
+
+  const renderProducts = () => {
+    productGrid.innerHTML = '';
+    let visibleCount = 0;
+
+    products.forEach(p => {
+      const matchesSearch = p.name.toLowerCase().includes(searchInput.value.toLowerCase());
+      if (matchesSearch) {
+        visibleCount++;
+        const card = document.createElement('div');
+        card.classList.add('product-card');
+        card.innerHTML = `
+          <img src="${p.image_url || 'images/default_product.png'}" alt="${p.name}">
+          <div class="product-info">
+            <h4>${p.name}</h4>
+            <p>₹${p.price}</p>
+            <p>${p.quantity} available</p>
+            <p style="font-size:0.85rem; color:#555;">${p.description || ''}</p>
+            <div class="farmer-info">
+              <img src="images/default_farm.png" alt="${p.farmer_name || 'Farmer'}">
+              <a href="farmerprofile.html?id=${p.farmer_id}">${p.farmer_name || 'Farmer'}</a>
+            </div>
+          </div>
+          <button class="buy-btn">Buy Now</button>
+        `;
+        productGrid.appendChild(card);
+
+        card.querySelector('.buy-btn').addEventListener('click', () => {
+          addToCart({
+            id: p.id,
+            name: p.name,
+            price: p.price,
+            image: p.image_url || ''
+          });
+        });
+      }
+    });
+
+    noResultsMsg.style.display = visibleCount === 0 ? 'block' : 'none';
+  };
+
+  searchInput.addEventListener('input', renderProducts);
+
+  fetch("http://localhost:5000/api/products")
+    .then(res => res.json())
+    .then(data => { 
+      console.log("Products from API:", data); 
+      products = data; 
+      renderProducts(); 
+    })
+    .catch(err => console.error(err));
+});
+</script>
+
+
+
+
+
+product.js
+
+
+const express = require("express");
+const router = express.Router();
+const db = require("../db");
+const multer = require("multer");
+const path = require("path");
+
+// ================================
+// Multer storage configuration
+// ================================
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/");
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
+});
+const upload = multer({ storage });
+
+// ================================
+// POST: Add new product
+// ================================
+router.post("/", upload.single("image"), (req, res) => {
+  const { name, category, price, quantity, description, farmer_id, mandi } = req.body;
+  const image = req.file ? req.file.filename : null;
+
+  if (!name || !category || !price || !quantity || !farmer_id || !mandi) {
+    return res.status(400).json({ error: "All required fields must be filled" });
+  }
+
+  const sql = `
+    INSERT INTO products 
+      (name, category, price, quantity, image_url, description, farmer_id, mandi) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  db.query(sql, [name, category, price, quantity, image, description, farmer_id, mandi], (err, result) => {
+    if (err) {
+      console.error("Database error:", err);
+      return res.status(500).json({ error: "Database error", details: err });
+    }
+    res.status(201).json({ message: "✅ Product added successfully", productId: result.insertId });
+  });
+});
+
+// ================================
+// GET: Fetch all products
+// ================================
+router.get("/", (req, res) => {
+  const sql = `
+    SELECT p.*, u.fullName AS farmer_name
+    FROM products p
+    LEFT JOIN users u ON p.farmer_id = u.id
+    ORDER BY p.id DESC
+  `;
+
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error("Database error:", err);
+      return res.status(500).json({ error: "Database error" });
+    }
+
+    results.forEach(p => {
+      if (p.image_url) p.image_url = `${BASE_URL}/uploads/${p.image_url}`;
+    });
+
+    res.json(results);
+  });
+});
+
+
+module.exports = router;
+
+
+
+marketplace on 4.30 sat
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HarvestHub Marketplace</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #2e7d32;
+      --secondary-color: #dcedc8;
+      --text-color: #333;
+      --card-bg: rgba(255, 255, 255, 0.95);
+      --header-bg: rgba(255, 255, 255, 0.85);
+      --red-flag: #e53935;
+      --live-auction-color: #e53935;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(rgba(240, 245, 230, 0.9), rgba(240, 245, 230, 0.9)), url('images/market_bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: var(--text-color);
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background: var(--header-bg);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo img { height: 45px; }
+    .logo h1 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; color: var(--primary-color); font-weight: 700; }
+
+    .welcome-message { font-size: 1.1rem; font-weight: 500; color: var(--primary-color); flex: 1; text-align: center; }
+
+    .search-bar { flex: 1; margin: 0 2rem; max-width: 500px; }
+    .search-bar input { width: 100%; padding: 0.75rem 1rem; border-radius: 25px; border: 1px solid #ddd; font-size: 1rem; transition: box-shadow 0.3s ease; }
+    .search-bar input:focus { outline: none; box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.2); }
+
+    .icons { display: flex; gap: 1.5rem; align-items: center; }
+    .icons .icon-btn { font-size: 1.25rem; cursor: pointer; color: var(--primary-color); transition: transform 0.2s ease, color 0.2s ease; text-decoration: none; }
+    .icons .icon-btn:hover { transform: scale(1.1); color: #388e3c; }
+    .icons .logout-btn { font-size: 0.9rem; font-weight: 500; padding: 0.5rem 1rem; background-color: var(--red-flag); color: white; border-radius: 8px; text-decoration: none; }
+
+    .main-content { display: flex; flex-wrap: wrap; gap: 2rem; padding: 1.5rem 2rem; }
+    .auction-banner { flex: 0 1 280px; min-width: 250px; background: var(--card-bg); border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.08); display: flex; flex-direction: column; }
+    .auction-banner h3 { font-size: 1.5rem; color: var(--primary-color); margin-bottom: 1rem; text-align: center; }
+
+    .product-grid-container { flex: 1 1 0%; min-width: 0; }
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 2rem; }
+    .product-card { background: var(--card-bg); border-radius: 12px; padding: 1.25rem; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transition: transform 0.3s ease, box-shadow 0.3s ease; display: flex; flex-direction: column; }
+    .product-card:hover { transform: translateY(-5px); box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
+    .product-card img { width: 100%; border-radius: 8px; height: 180px; object-fit: cover; transition: transform 0.3s ease; }
+    .product-card:hover img { transform: scale(1.05); }
+    .product-info { margin-top: 1rem; flex-grow: 1; }
+    .product-info h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.25rem; color: var(--text-color); }
+    .product-info p { font-size: 0.9rem; color: #666; margin-bottom: 0.25rem; }
+    .buy-btn { display: block; width: 100%; padding: 0.75rem; background-color: var(--primary-color); color: white; text-align: center; border: none; border-radius: 8px; margin-top: 1rem; cursor: pointer; font-size: 1rem; font-weight: 500; transition: background-color 0.2s ease; }
+    .buy-btn:hover { background-color: #388e3c; }
+
+    .farmer-info { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; }
+    .farmer-info img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; }
+    .farmer-info a { text-decoration: none; color: var(--primary-color); font-weight: 500; }
+    #no-results { display: none; margin-top: 1rem; font-weight: 500; color: #e53935; text-align: center; }
+
+    @media (max-width: 992px) { .main-content { flex-direction: column; } .auction-banner, .product-grid-container { flex-basis: 100%; } }
+    @media (max-width: 768px) { header { flex-wrap: wrap; padding: 1rem; } .logo { flex-grow: 1; } .search-bar { order: 3; margin: 1rem 0; width: 100%; } .icons { order: 2; } .product-grid { gap: 1rem; } }
+  </style>
+</head>
+<body>
+<header>
+  <div class="logo">
+    <img src="images/bglogo.png" alt="Harvest Hub Logo">
+    <h1>HarvestHub</h1>
+  </div>
+  <span class="welcome-message" id="welcomeMsg">Welcome to the Marketplace!</span>
+  <div class="search-bar">
+    <input type="text" placeholder="Search for products or farms..." id="searchInput">
+  </div>
+  <div class="icons">
+    <a href="auctions.html" class="icon-btn" title="Auctions"><i class="fas fa-gavel"></i></a>
+    <span class="icon-btn" id="filter-btn" title="Filters"><i class="fas fa-filter"></i></span>
+    <span class="icon-btn" id="fav-btn" title="Favorites"><i class="fas fa-heart"></i></span>
+    <span class="icon-btn" id="cart-btn" title="Cart"><i class="fas fa-shopping-cart"></i></span>
+    <a href="user-profile.html" class="icon-btn" id="profile-btn" title="Profile"><i class="fas fa-user-circle"></i></a>
+    <a href="intex.html" class="logout-btn" id="logout-btn">Log Out</a>
+  </div>
+</header>
+
+<main class="main-content">
+  <aside class="auction-banner">
+    <h3>Live Auctions</h3>
+    <div id="live-auctions-list" class="live-auctions-list"></div>
+    <a href="auctions.html" class="view-all-auctions">View all Auctions</a>
+  </aside>
+
+  <div class="product-grid-container">
+    <span class="local-harvests-heading" id="local-harvests-heading">Local Harvests</span>
+    <div class="product-grid" id="productGrid"></div>
+    <div id="no-results">No products found. Try adjusting your search or filters.</div>
+  </div>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const userProfile = JSON.parse(localStorage.getItem('userProfile'));
+  if (!userProfile) window.location.href = "login.html";
+
+  document.getElementById('welcomeMsg').textContent = `Welcome, ${userProfile.fullName || 'Guest'}!`;
+  document.getElementById('local-harvests-heading').textContent = `Local Harvests in ${userProfile.location || 'Your Location'}`;
+
+  const searchInput = document.getElementById('searchInput');
+  const productGrid = document.getElementById("productGrid");
+  const noResultsMsg = document.getElementById('no-results');
+
+  // Cart initialization
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const saveCart = () => localStorage.setItem('cart', JSON.stringify(cart));
+
+  const addToCart = (product) => {
+    const existing = cart.find(i => i.id === product.id);
+    if (existing) existing.quantity++;
+    else cart.push({ ...product, quantity: 1 });
+    saveCart();
+    alert(`${product.name} added to cart!`);
+  };
+
+  let products = [];
+
+  const renderProducts = () => {
+    productGrid.innerHTML = '';
+    let visibleCount = 0;
+
+    products.forEach(p => {
+      const matchesSearch = p.name.toLowerCase().includes(searchInput.value.toLowerCase());
+      if (matchesSearch) {
+        visibleCount++;
+        const card = document.createElement('div');
+        card.classList.add('product-card');
+        card.innerHTML = `
+          <img src="${p.image_url || 'images/default_product.png'}" alt="${p.name}">
+          <div class="product-info">
+            <h4>${p.name}</h4>
+            <p>₹${p.price}</p>
+            <p>${p.quantity} available</p>
+            <p style="font-size:0.85rem; color:#555;">${p.description || ''}</p>
+            <div class="farmer-info">
+              <img src="images/default_farm.png" alt="${p.farmer_name || 'Farmer'}">
+              <a href="farmerprofile.html?id=${p.farmer_id}">${p.farmer_name || 'Farmer'}</a>
+            </div>
+            <div class="price-warning" style="margin-top:5px; font-size:0.85rem;"></div>
+          </div>
+          <button class="buy-btn">Buy Now</button>
+        `;
+        productGrid.appendChild(card);
+
+        const buyBtn = card.querySelector('.buy-btn');
+        const priceWarning = card.querySelector('.price-warning');
+
+        buyBtn.addEventListener('click', async () => {
+          try {
+            const res = await fetch(
+              `http://localhost:5000/api/mandi-price?commodity=${encodeURIComponent(p.name)}&mandi=${encodeURIComponent(p.mandi || 'default')}`
+            );
+            const data = await res.json();
+
+            if (res.ok && data.modal_price) {
+              const mandiPricePerKg = data.modal_price / 100; // quintal to kg
+              let warningText = '';
+              let canAdd = true;
+
+              if (p.price > mandiPricePerKg * 1.2) {
+                warningText = `⚠️ Your price ₹${p.price}/kg is much higher than mandi ₹${mandiPricePerKg.toFixed(2)}/kg`;
+                priceWarning.style.color = "red";
+                canAdd = confirm(warningText + "\nDo you still want to add to cart?");
+              } else if (p.price < mandiPricePerKg * 0.8) {
+                warningText = `⚠️ Your price ₹${p.price}/kg is much lower than mandi ₹${mandiPricePerKg.toFixed(2)}/kg`;
+                priceWarning.style.color = "orange";
+                canAdd = confirm(warningText + "\nDo you still want to add to cart?");
+              } else {
+                warningText = `✅ Fair price. Mandi modal: ₹${mandiPricePerKg.toFixed(2)}/kg`;
+                priceWarning.style.color = "green";
+              }
+              priceWarning.textContent = warningText;
+
+              if (canAdd) addToCart({ id: p.id, name: p.name, price: p.price, image: p.image_url || '' });
+            } else {
+              priceWarning.textContent = "⚠️ No mandi data found for this item";
+              priceWarning.style.color = "gray";
+              if (confirm("No mandi data available. Add to cart anyway?")) {
+                addToCart({ id: p.id, name: p.name, price: p.price, image: p.image_url || '' });
+              }
+            }
+          } catch (err) {
+            console.error("Error fetching mandi price:", err);
+            priceWarning.textContent = "⚠️ Error fetching mandi data";
+            priceWarning.style.color = "gray";
+            if (confirm("Error fetching price data. Add to cart anyway?")) {
+              addToCart({ id: p.id, name: p.name, price: p.price, image: p.image_url || '' });
+            }
+          }
+        });
+      }
+    });
+
+    noResultsMsg.style.display = visibleCount === 0 ? 'block' : 'none';
+  };
+
+  searchInput.addEventListener('input', renderProducts);
+
+  // Fetch products from backend
+  fetch("http://localhost:5000/api/products")
+    .then(res => res.json())
+    .then(data => { 
+      console.log("Products from API:", data); 
+      products = data; 
+      renderProducts(); 
+    })
+    .catch(err => console.error(err));
+});
+</script>
+
+</body>
+</html>
+
+
+
+new marketplace ...
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HarvestHub Marketplace</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #2e7d32;
+      --secondary-color: #dcedc8;
+      --text-color: #333;
+      --card-bg: rgba(255, 255, 255, 0.95);
+      --header-bg: rgba(255, 255, 255, 0.85);
+      --red-flag: #e53935;
+      --live-auction-color: #e53935;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(rgba(240, 245, 230, 0.9), rgba(240, 245, 230, 0.9)), url('images/market_bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: var(--text-color);
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background: var(--header-bg);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo img { height: 45px; }
+    .logo h1 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; color: var(--primary-color); font-weight: 700; }
+
+    .welcome-message { font-size: 1.1rem; font-weight: 500; color: var(--primary-color); flex: 1; text-align: center; }
+
+    .search-bar { flex: 1; margin: 0 2rem; max-width: 500px; }
+    .search-bar input { width: 100%; padding: 0.75rem 1rem; border-radius: 25px; border: 1px solid #ddd; font-size: 1rem; transition: box-shadow 0.3s ease; }
+    .search-bar input:focus { outline: none; box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.2); }
+
+    .icons { display: flex; gap: 1.5rem; align-items: center; position: relative; }
+    .icons .icon-btn { font-size: 1.25rem; cursor: pointer; color: var(--primary-color); transition: transform 0.2s ease, color 0.2s ease; text-decoration: none; position: relative; }
+    .icons .icon-btn:hover { transform: scale(1.1); color: #388e3c; }
+    .icons .logout-btn { font-size: 0.9rem; font-weight: 500; padding: 0.5rem 1rem; background-color: var(--red-flag); color: white; border-radius: 8px; text-decoration: none; }
+
+    /* cart count badge */
+    .cart-count {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      background: var(--red-flag);
+      color: white;
+      font-size: 0.75rem;
+      width: 18px;
+      height: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      font-weight: 700;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    .main-content { display: flex; flex-wrap: wrap; gap: 2rem; padding: 1.5rem 2rem; }
+    .auction-banner { flex: 0 1 280px; min-width: 250px; background: var(--card-bg); border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.08); display: flex; flex-direction: column; }
+    .auction-banner h3 { font-size: 1.5rem; color: var(--primary-color); margin-bottom: 1rem; text-align: center; }
+
+    .product-grid-container { flex: 1 1 0%; min-width: 0; }
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 2rem; }
+    .product-card { background: var(--card-bg); border-radius: 12px; padding: 1.25rem; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transition: transform 0.3s ease, box-shadow 0.3s ease; display: flex; flex-direction: column; }
+    .product-card:hover { transform: translateY(-5px); box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
+    .product-card img { width: 100%; border-radius: 8px; height: 180px; object-fit: cover; transition: transform 0.3s ease; }
+    .product-card:hover img { transform: scale(1.05); }
+    .product-info { margin-top: 1rem; flex-grow: 1; }
+    .product-info h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.25rem; color: var(--text-color); }
+    .product-info p { font-size: 0.9rem; color: #666; margin-bottom: 0.25rem; }
+    .buy-btn { display: block; width: 100%; padding: 0.75rem; background-color: var(--primary-color); color: white; text-align: center; border: none; border-radius: 8px; margin-top: 1rem; cursor: pointer; font-size: 1rem; font-weight: 500; transition: background-color 0.2s ease; }
+    .buy-btn:hover { background-color: #388e3c; }
+
+    .farmer-info { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; }
+    .farmer-info img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; }
+    .farmer-info a { text-decoration: none; color: var(--primary-color); font-weight: 500; }
+    #no-results { display: none; margin-top: 1rem; font-weight: 500; color: #e53935; text-align: center; }
+
+    /* Cart sidebar */
+    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; z-index: 900; }
+    .cart-sidebar {
+      position: fixed;
+      right: -420px;
+      top: 0;
+      height: 100vh;
+      width: 380px;
+      background: #fff;
+      z-index: 1001;
+      box-shadow: -8px 0 24px rgba(0,0,0,0.15);
+      transition: right 0.28s ease;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .cart-sidebar.open { right: 0; }
+    .cart-sidebar h3 { margin-bottom: 10px; color: var(--primary-color); }
+    .cart-items { flex: 1; overflow-y: auto; min-height: 0; }
+    .cart-item { display: flex; gap: 10px; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid #eee; }
+    .cart-item img { width: 64px; height: 64px; object-fit: cover; border-radius: 8px; }
+    .cart-item .meta { flex: 1; }
+    .cart-item .meta h4 { font-size: 0.95rem; margin-bottom: 4px; }
+    .cart-item .meta p { font-size: 0.85rem; color: #666; }
+    .cart-item .controls { display:flex; gap:6px; align-items:center; }
+    .qty-btn { background:#f0f0f0; border:none; border-radius:4px; padding:6px 8px; cursor:pointer; }
+    .remove-btn { background:transparent; border:none; color:#e53935; cursor:pointer; font-size:1rem; padding:6px; }
+
+    .cart-summary { margin-top: 10px; border-top: 1px solid #eee; padding-top: 10px; }
+    .cart-summary .total { display:flex; justify-content:space-between; font-weight:700; margin-bottom:10px; }
+    .checkout-btn { width: 100%; padding: 10px; border: none; border-radius: 8px; background: var(--primary-color); color: white; cursor: pointer; font-weight:700; }
+    .close-cart { background:transparent; border:none; font-size:1.2rem; cursor:pointer; color:#333; position:absolute; top:8px; right:12px; }
+
+    @media (max-width: 768px) {
+      .cart-sidebar { width: 100%; right: -100%; }
+      .cart-sidebar.open { right: 0; }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="logo">
+    <img src="images/bglogo.png" alt="Harvest Hub Logo">
+    <h1>HarvestHub</h1>
+  </div>
+  <span class="welcome-message" id="welcomeMsg">Welcome to the Marketplace!</span>
+  <div class="search-bar">
+    <input type="text" placeholder="Search for products or farms..." id="searchInput">
+  </div>
+  <div class="icons">
+    <a href="auctions.html" class="icon-btn" title="Auctions"><i class="fas fa-gavel"></i></a>
+    <span class="icon-btn" id="filter-btn" title="Filters"><i class="fas fa-filter"></i></span>
+    <span class="icon-btn" id="fav-btn" title="Favorites"><i class="fas fa-heart"></i></span>
+
+    <!-- cart button with badge -->
+    <span class="icon-btn" id="cart-btn" title="Cart" style="position:relative;">
+      <i class="fas fa-shopping-cart"></i>
+      <span class="cart-count" id="cartCount">0</span>
+    </span>
+
+    <a href="user-profile.html" class="icon-btn" id="profile-btn" title="Profile"><i class="fas fa-user-circle"></i></a>
+    <a href="intex.html" class="logout-btn" id="logout-btn">Log Out</a>
+  </div>
+</header>
+
+<main class="main-content">
+  <aside class="auction-banner">
+    <h3>Live Auctions</h3>
+    <div id="live-auctions-list" class="live-auctions-list"></div>
+    <a href="auctions.html" class="view-all-auctions">View all Auctions</a>
+  </aside>
+
+  <div class="product-grid-container">
+    <span class="local-harvests-heading" id="local-harvests-heading">Local Harvests</span>
+    <div class="product-grid" id="productGrid"></div>
+    <div id="no-results">No products found. Try adjusting your search or filters.</div>
+  </div>
+</main>
+
+<!-- Cart sidebar -->
+<div class="overlay" id="overlay"></div>
+<aside class="cart-sidebar" id="cartSidebar" aria-hidden="true">
+  <button class="close-cart" id="closeCartBtn" aria-label="Close cart">&times;</button>
+  <h3>Your Cart</h3>
+  <div class="cart-items" id="cartItemsContainer">
+    <!-- cart items injected here -->
+  </div>
+
+  <div class="cart-summary">
+    <div class="total"><span>Total</span><span id="cartTotal">₹0.00</span></div>
+    <button class="checkout-btn" id="proceedCheckoutBtn">Proceed to Checkout</button>
+  </div>
+</aside>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const userProfile = JSON.parse(localStorage.getItem('userProfile'));
+  if (!userProfile) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  document.getElementById('welcomeMsg').textContent = `Welcome, ${userProfile.fullName || 'Guest'}!`;
+  document.getElementById('local-harvests-heading').textContent = `Local Harvests in ${userProfile.location || 'Your Location'}`;
+
+  const searchInput = document.getElementById('searchInput');
+  const productGrid = document.getElementById("productGrid");
+  const noResultsMsg = document.getElementById('no-results');
+
+  // cart state (persisted in localStorage)
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+  const saveCart = () => {
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartCount();
+    renderCartSidebar();
+  };
+
+  const updateCartCount = () => {
+    const count = cart.reduce((s, i) => s + i.quantity, 0);
+    document.getElementById('cartCount').textContent = count;
+  };
+
+  const addToCart = (product) => {
+    // product: { id, name, price, image, farmer_id }
+    const existing = cart.find(i => i.id === product.id);
+    if (existing) {
+      existing.quantity += 1;
+    } else {
+      cart.push({ ...product, quantity: 1 });
+    }
+    saveCart();
+    // subtle feedback instead of alert
+    const prev = document.activeElement;
+    // tiny toast-like feedback
+    const toast = document.createElement('div');
+    toast.textContent = `${product.name} added to cart`;
+    toast.style = 'position:fixed;bottom:18px;right:18px;background:#2e7d32;color:#fff;padding:8px 12px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.12);z-index:2000;';
+    document.body.appendChild(toast);
+    setTimeout(()=>toast.remove(), 1800);
+    prev?.focus?.();
+  };
+
+  // render cart sidebar contents
+  const cartItemsContainer = document.getElementById('cartItemsContainer');
+  const cartTotalEl = document.getElementById('cartTotal');
+
+  function renderCartSidebar() {
+    cartItemsContainer.innerHTML = '';
+    let total = 0;
+    if (cart.length === 0) {
+      cartItemsContainer.innerHTML = '<p style="color:#666;text-align:center;margin-top:20px;">Your cart is empty.</p>';
+    } else {
+      cart.forEach(item => {
+        const el = document.createElement('div');
+        el.className = 'cart-item';
+        el.dataset.id = item.id;
+        el.innerHTML = `
+          <img src="${item.image || 'images/default_product.png'}" alt="${item.name}">
+          <div class="meta">
+            <h4>${item.name}</h4>
+            <p>₹${item.price.toFixed ? item.price.toFixed(2) : item.price} each</p>
+          </div>
+          <div class="controls">
+            <button class="qty-btn qty-decr" title="Decrease">−</button>
+            <span class="qty">${item.quantity}</span>
+            <button class="qty-btn qty-incr" title="Increase">+</button>
+            <button class="remove-btn" title="Remove">✕</button>
+          </div>
+        `;
+        cartItemsContainer.appendChild(el);
+        total += (Number(item.price) * item.quantity);
+      });
+    }
+    cartTotalEl.textContent = `₹${total.toFixed(2)}`;
+  }
+
+  // cart controls (event delegation)
+  cartItemsContainer.addEventListener('click', (e) => {
+    const root = e.target.closest('.cart-item');
+    if (!root) return;
+    const id = root.dataset.id;
+    const idx = cart.findIndex(i => String(i.id) === String(id));
+    if (idx === -1) return;
+
+    if (e.target.classList.contains('qty-incr')) {
+      cart[idx].quantity += 1;
+      saveCart();
+    } else if (e.target.classList.contains('qty-decr')) {
+      cart[idx].quantity -= 1;
+      if (cart[idx].quantity <= 0) cart.splice(idx,1);
+      saveCart();
+    } else if (e.target.classList.contains('remove-btn')) {
+      cart.splice(idx,1);
+      saveCart();
+    }
+  });
+
+  // Cart open/close
+  const cartBtn = document.getElementById('cart-btn');
+  const cartSidebar = document.getElementById('cartSidebar');
+  const overlay = document.getElementById('overlay');
+  const closeCartBtn = document.getElementById('closeCartBtn');
+
+  function openCart() {
+    cartSidebar.classList.add('open');
+    overlay.style.display = 'block';
+    overlay.onclick = closeCart;
+    cartSidebar.setAttribute('aria-hidden','false');
+  }
+  function closeCart() {
+    cartSidebar.classList.remove('open');
+    overlay.style.display = 'none';
+    cartSidebar.setAttribute('aria-hidden','true');
+  }
+  cartBtn.addEventListener('click', () => openCart());
+  closeCartBtn.addEventListener('click', () => closeCart());
+
+  // Proceed to checkout: navigate to placeorder.html
+  document.getElementById('proceedCheckoutBtn').addEventListener('click', () => {
+    // ensure cart is not empty
+    if (cart.length === 0) {
+      alert("Your cart is empty.");
+      return;
+    }
+    // navigate to placeorder page which will load cart from localStorage
+    window.location.href = 'placeorder.html';
+  });
+
+  // ---------------------------
+  // Existing product rendering + mandi price check on Add to cart
+  // ---------------------------
+  let products = [];
+
+  const renderProducts = () => {
+    productGrid.innerHTML = '';
+    let visibleCount = 0;
+
+    products.forEach(p => {
+      const matchesSearch = p.name.toLowerCase().includes(searchInput.value.toLowerCase());
+      if (matchesSearch) {
+        visibleCount++;
+        const card = document.createElement('div');
+        card.classList.add('product-card');
+        card.innerHTML = `
+          <img src="${p.image_url || 'images/default_product.png'}" alt="${p.name}">
+          <div class="product-info">
+            <h4>${p.name}</h4>
+            <p>₹${p.price}</p>
+            <p>${p.quantity} available</p>
+            <p style="font-size:0.85rem; color:#555;">${p.description || ''}</p>
+            <div class="farmer-info">
+              <img src="images/default_farm.png" alt="${p.farmer_name || 'Farmer'}">
+              <a href="farmerprofile.html?id=${p.farmer_id}">${p.farmer_name || 'Farmer'}</a>
+            </div>
+            <div class="price-warning" style="margin-top:5px; font-size:0.85rem;"></div>
+          </div>
+          <button class="buy-btn">Buy Now</button>
+        `;
+        productGrid.appendChild(card);
+
+        const buyBtn = card.querySelector('.buy-btn');
+        const priceWarning = card.querySelector('.price-warning');
+
+        buyBtn.addEventListener('click', async () => {
+          // 1) fetch mandi price for product.name and p.mandi (if present)
+          try {
+            const res = await fetch(
+              `http://localhost:5000/api/mandi-price?commodity=${encodeURIComponent(p.name)}&mandi=${encodeURIComponent(p.mandi || '')}`
+            );
+            const data = await res.json();
+
+            if (res.ok && data.modal_price) {
+              const mandiPricePerKg = data.modal_price / 100; // quintal -> kg
+              let warningText = '';
+              let allow = true;
+
+              if (Number(p.price) > mandiPricePerKg * 1.2) {
+                warningText = `⚠️ Price ₹${p.price}/kg is higher than mandi ₹${mandiPricePerKg.toFixed(2)}/kg`;
+                priceWarning.style.color = "red";
+                allow = confirm(warningText + "\nAdd to cart anyway?");
+              } else if (Number(p.price) < mandiPricePerKg * 0.8) {
+                warningText = `⚠️ Price ₹${p.price}/kg is lower than mandi ₹${mandiPricePerKg.toFixed(2)}/kg`;
+                priceWarning.style.color = "orange";
+                allow = confirm(warningText + "\nAdd to cart anyway?");
+              } else {
+                warningText = `✅ Fair price: mandi ₹${mandiPricePerKg.toFixed(2)}/kg`;
+                priceWarning.style.color = "green";
+              }
+              priceWarning.textContent = warningText;
+              if (allow) {
+                addToCart({
+                  id: p.id,
+                  name: p.name,
+                  price: Number(p.price),
+                  image: p.image_url || '',
+                  farmer_id: p.farmer_id
+                });
+              }
+            } else {
+              priceWarning.textContent = "⚠️ No mandi data for this item";
+              priceWarning.style.color = "gray";
+              if (confirm("No mandi data available. Add to cart anyway?")) {
+                addToCart({
+                  id: p.id,
+                  name: p.name,
+                  price: Number(p.price),
+                  image: p.image_url || '',
+                  farmer_id: p.farmer_id
+                });
+              }
+            }
+          } catch (err) {
+            console.error("Error fetching mandi price:", err);
+            priceWarning.textContent = "⚠️ Error fetching mandi data";
+            priceWarning.style.color = "gray";
+            if (confirm("Error fetching price data. Add to cart anyway?")) {
+              addToCart({
+                id: p.id,
+                name: p.name,
+                price: Number(p.price),
+                image: p.image_url || '',
+                farmer_id: p.farmer_id
+              });
+            }
+          }
+        }); // buyBtn click end
+      } // matchesSearch end
+    });
+
+    noResultsMsg.style.display = visibleCount === 0 ? 'block' : 'none';
+  };
+
+  searchInput.addEventListener('input', () => renderProducts());
+
+  // Fetch products from backend
+  fetch("http://localhost:5000/api/products")
+    .then(res => res.json())
+    .then(data => {
+      console.log("Products from API:", data);
+      products = data;
+      renderProducts();
+      updateCartCount();
+      renderCartSidebar();
+    })
+    .catch(err => console.error(err));
+});
+</script>
+</body>
+</html>
+
+
+
+order controler
+
+
+const db = require("../db");
+
+const orderController = {
+  createOrder: (req, res) => {
+    const { user_id, total, instructions, items } = req.body;
+
+    console.log("📦 Received order payload:", req.body);
+
+    if (!user_id || !Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ error: "Invalid order data" });
+    }
+
+    // Insert into orders table
+    db.query(
+      "INSERT INTO orders (user_id, total, status, created_at) VALUES (?, ?, ?, NOW())",
+      [user_id, total, "Pending"],
+      (err, orderResult) => {
+        if (err) {
+          console.error("❌ Error inserting order:", err);
+          return res.status(500).json({ error: "Internal Server Error" });
+        }
+
+        const orderId = orderResult.insertId;
+        let itemsProcessed = 0;
+
+        items.forEach((item) => {
+          // Insert order item
+          db.query(
+            "INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)",
+            [orderId, item.product_id, item.quantity, item.price],
+            (err2) => {
+              if (err2) {
+                console.error("❌ Error inserting order item:", err2);
+                return res.status(500).json({ error: "Internal Server Error" });
+              }
+
+              // Reduce product quantity
+              db.query(
+                "UPDATE products SET quantity = quantity - ? WHERE id = ? AND quantity >= ?",
+                [item.quantity, item.product_id, item.quantity],
+                (err3, result) => {
+                  if (err3) {
+                    console.error("❌ Error updating product quantity:", err3);
+                    return res.status(500).json({ error: "Internal Server Error" });
+                  }
+
+                  if (result.affectedRows === 0) {
+                    console.warn(`⚠️ Not enough quantity for product ${item.product_id}`);
+                  }
+
+                  itemsProcessed++;
+
+                  // After all items processed, clear cart and send response
+                  if (itemsProcessed === items.length) {
+                    db.query(
+                      "DELETE FROM cart WHERE user_id = ?",
+                      [user_id],
+                      (err4) => {
+                        if (err4) {
+                          console.error("❌ Error clearing cart:", err4);
+                          return res.status(500).json({ error: "Internal Server Error" });
+                        }
+
+                        // Send updated quantity info back for frontend update
+                        const updatedProducts = items.map((i) => ({
+                          product_id: i.product_id,
+                          quantity_ordered: i.quantity
+                        }));
+
+                        res.json({ success: true, orderId, updatedProducts });
+                      }
+                    );
+                  }
+                }
+              );
+            }
+          );
+        });
+      }
+    );
+  },
+};
+
+module.exports = orderController;
+
+
+
+
+
+
+new ordercontroller...
+
+
+
+const db = require("../db");
+
+const orderController = {
+  // ✅ Existing: createOrder
+  createOrder: (req, res) => {
+    const { user_id, total, instructions, items } = req.body;
+
+    console.log("📦 Received order payload:", req.body);
+
+    if (!user_id || !Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ error: "Invalid order data" });
+    }
+
+    // Insert into orders table
+    db.query(
+      "INSERT INTO orders (user_id, total, status, created_at) VALUES (?, ?, ?, NOW())",
+      [user_id, total, "Pending"],
+      (err, orderResult) => {
+        if (err) {
+          console.error("❌ Error inserting order:", err);
+          return res.status(500).json({ error: "Internal Server Error" });
+        }
+
+        const orderId = orderResult.insertId;
+        let itemsProcessed = 0;
+
+        // Insert each order_item and reduce product qty
+        items.forEach((item) => {
+          db.query(
+            "INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)",
+            [orderId, item.product_id, item.quantity, item.price],
+            (err2) => {
+              if (err2) {
+                console.error("❌ Error inserting order item:", err2);
+                return res.status(500).json({ error: "Internal Server Error" });
+              }
+
+              // Reduce product quantity (safely only if enough stock)
+              db.query(
+                "UPDATE products SET quantity = quantity - ? WHERE id = ? AND quantity >= ?",
+                [item.quantity, item.product_id, item.quantity],
+                (err3, result) => {
+                  if (err3) {
+                    console.error("❌ Error updating product quantity:", err3);
+                    return res.status(500).json({ error: "Internal Server Error" });
+                  }
+
+                  if (result.affectedRows === 0) {
+                    console.warn(`⚠️ Not enough quantity for product ${item.product_id}`);
+                  }
+
+                  itemsProcessed++;
+
+                  // After all items processed, clear cart and create delivery tasks
+                  if (itemsProcessed === items.length) {
+                    db.query(
+                      "DELETE FROM cart WHERE user_id = ?",
+                      [user_id],
+                      (err4) => {
+                        if (err4) {
+                          console.error("❌ Error clearing cart:", err4);
+                          return res.status(500).json({ error: "Internal Server Error" });
+                        }
+
+                        const updatedProducts = items.map((i) => ({
+                          product_id: i.product_id,
+                          quantity_ordered: i.quantity
+                        }));
+
+                        // ---- Create delivery tasks per unique farmer ----
+                        db.query(
+                          "SELECT fullName, contact, location, pincode FROM users WHERE id = ? LIMIT 1",
+                          [user_id],
+                          (errBuyer, buyerRows) => {
+                            const buyer = (buyerRows && buyerRows[0]) || { fullName: '', contact: '', location: '', pincode: '' };
+                            const productIds = items.map(i => i.product_id);
+
+                            if (productIds.length === 0) {
+                              return res.json({ success: true, orderId, updatedProducts });
+                            }
+
+                            db.query(
+                              "SELECT DISTINCT farmer_id FROM products WHERE id IN (?)",
+                              [productIds],
+                              (errF, farmerRows) => {
+                                if (!farmerRows || farmerRows.length === 0) {
+                                  return res.json({ success: true, orderId, updatedProducts });
+                                }
+
+                                let farmersProcessed = 0;
+                                const totalFarmers = farmerRows.length;
+
+                                farmerRows.forEach(fr => {
+                                  const farmerId = fr.farmer_id;
+
+                                  db.query(
+                                    "SELECT id, fullName, contact, location, pincode FROM users WHERE id = ? LIMIT 1",
+                                    [farmerId],
+                                    (errFr, frInfoRows) => {
+                                      const frInfo = (frInfoRows && frInfoRows[0]) || { fullName: '', contact: '', location: '', pincode: '' };
+
+                                      db.query(
+                                        `INSERT INTO delivery_tasks
+                                          (order_id, agent_id, pickup_name, pickup_contact, pickup_location, pickup_pincode,
+                                           delivery_name, delivery_contact, delivery_location, delivery_pincode, status, created_at)
+                                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())`,
+                                        [
+                                          orderId,
+                                          2, // delivery agent id hardcoded
+                                          frInfo.fullName || '',
+                                          frInfo.contact || '',
+                                          frInfo.location || '',
+                                          frInfo.pincode || '',
+                                          buyer.fullName || '',
+                                          buyer.contact || '',
+                                          buyer.location || '',
+                                          buyer.pincode || '',
+                                          'Assigned'
+                                        ],
+                                        (errIns) => {
+                                          if (!errIns) {
+                                            console.log(`🚚 Delivery task created for order ${orderId}, farmer ${farmerId}`);
+                                          }
+                                          farmersProcessed++;
+                                          if (farmersProcessed === totalFarmers) {
+                                            return res.json({
+                                              success: true,
+                                              orderId,
+                                              updatedProducts,
+                                              message: "Order placed successfully and delivery tasks created"
+                                            });
+                                          }
+                                        }
+                                      );
+                                    }
+                                  );
+                                });
+                              }
+                            );
+                          }
+                        );
+                      }
+                    );
+                  }
+                }
+              );
+            }
+          );
+        });
+      }
+    );
+  },
+
+  // ✅ Existing: Get all orders of a user with items and delivery status
+  getUserOrders: (req, res) => {
+    const userId = req.params.userId;
+
+    const sqlOrders = `
+      SELECT o.id AS order_id, o.total, o.status AS order_status, o.created_at,
+             d.status AS delivery_status
+      FROM orders o
+      LEFT JOIN delivery_tasks d ON d.order_id = o.id
+      WHERE o.user_id = ?
+      ORDER BY o.created_at DESC
+    `;
+
+    db.query(sqlOrders, [userId], (err, orders) => {
+      if (err) return res.status(500).json({ message: "Error fetching orders", err });
+
+      if (orders.length === 0) return res.json([]);
+
+      const orderIds = orders.map(o => o.order_id);
+      const sqlItems = `
+        SELECT oi.order_id, p.name AS product_name, oi.quantity, oi.price
+        FROM order_items oi
+        JOIN products p ON p.id = oi.product_id
+        WHERE oi.order_id IN (?)
+      `;
+
+      db.query(sqlItems, [orderIds], (err2, items) => {
+        if (err2) return res.status(500).json({ message: "Error fetching order items", err2 });
+
+        const ordersWithItems = orders.map(order => ({
+          ...order,
+          items: items.filter(i => i.order_id === order.order_id)
+        }));
+
+        res.json(ordersWithItems);
+      });
+    });
+  },
+
+  // ✅ NEW: Get all products listed by a farmer
+  getFarmerProducts: (req, res) => {
+    const userId = req.params.userId;
+
+    const sql = `
+      SELECT id AS product_id, name, quantity, price, description, created_at
+      FROM products
+      WHERE farmer_id = ?
+      ORDER BY created_at DESC
+    `;
+
+    db.query(sql, [userId], (err, products) => {
+      if (err) return res.status(500).json({ message: "Error fetching farmer products", err });
+      res.json(products);
+    });
+  }
+
+// ---------------------
+// ADMIN REPORTS
+// ---------------------
+orderController.getAllOrdersAdmin = (req, res) => {
+    const sql = `
+        SELECT o.id AS order_id, o.total, o.status AS order_status, o.created_at,
+               u.id AS user_id, u.fullName AS buyer_name, u.email AS buyer_email, u.contact AS buyer_contact
+        FROM orders o
+        JOIN users u ON o.user_id = u.id
+        ORDER BY o.created_at DESC
+    `;
+
+    db.query(sql, (err, orders) => {
+        if (err) return res.status(500).json({ message: "Error fetching all orders", err });
+        res.json(orders);
+    });
+};
+
+orderController.getOrderItemsAdmin = (req, res) => {
+    const orderId = req.params.orderId;
+
+    const sql = `
+        SELECT oi.id AS order_item_id, p.name AS product_name, oi.quantity, oi.price, p.farmer_id, u.fullName AS farmer_name
+        FROM order_items oi
+        JOIN products p ON oi.product_id = p.id
+        JOIN users u ON p.farmer_id = u.id
+        WHERE oi.order_id = ?
+    `;
+
+    db.query(sql, [orderId], (err, items) => {
+        if (err) return res.status(500).json({ message: "Error fetching order items", err });
+        res.json(items);
+    });
+};
+
+orderController.getOrderAnalytics = (req, res) => {
+    const sql = `
+        SELECT 
+            (SELECT COUNT(*) FROM orders) AS total_orders,
+            (SELECT COUNT(*) FROM orders WHERE status='Pending') AS pending_orders,
+            (SELECT COUNT(*) FROM orders WHERE status='Completed') AS completed_orders,
+            (SELECT COUNT(*) FROM orders WHERE status='Cancelled') AS cancelled_orders
+    `;
+
+    db.query(sql, (err, summary) => {
+        if (err) return res.status(500).json({ message: "Error fetching order analytics", err });
+
+        // Fetch 5 recent orders
+        db.query("SELECT id AS order_id, total, status, created_at FROM orders ORDER BY created_at DESC LIMIT 5", (err2, recentOrders) => {
+            if (err2) return res.status(500).json({ message: "Error fetching recent orders", err2 });
+
+            res.json({ summary: summary[0], recentOrders });
+        });
+    });
+};
+
+
+
+
+};
+
+module.exports = orderController;
+
+
+
+admin,html
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard - HarvestHub</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+    :root {
+        --primary-color: #2e7d32;
+        --secondary-color: #dcedc8;
+        --text-color: #333;
+        --card-bg: rgba(255, 255, 255, 0.95);
+        --header-bg: rgba(255, 255, 255, 0.85);
+        --red-flag: #e53935;
+    }
+    body {
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        display: flex;
+        height: 100vh;
+        overflow: hidden;
+    }
+    aside {
+        width: 250px;
+        background-color: var(--secondary-color);
+        padding: 2rem 1rem;
+        display: flex;
+        flex-direction: column;
+    }
+    aside h2 {
+        color: var(--primary-color);
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    .sidebar-nav a {
+        display: block;
+        padding: 0.75rem 1rem;
+        margin-bottom: 0.5rem;
+        text-decoration: none;
+        color: var(--text-color);
+        border-radius: 6px;
+        transition: background-color 0.2s;
+    }
+    .sidebar-nav a:hover, .sidebar-nav a.active {
+        background-color: var(--primary-color);
+        color: #fff;
+    }
+    main {
+        flex: 1;
+        padding: 2rem;
+        overflow-y: auto;
+        background: #f4f4f4;
+    }
+    h1 {
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 2rem;
+        background: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    th, td {
+        padding: 0.75rem 1rem;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
+    th {
+        background: var(--primary-color);
+        color: #fff;
+    }
+    .card {
+        background: #fff;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+</style>
+</head>
+<body>
+
+<aside>
+    <h2>Admin Dashboard</h2>
+    <nav class="sidebar-nav">
+        <a href="#" class="active" data-section="analytics">Analytics</a>
+        <a href="#" data-section="users">Users Report</a>
+        <a href="#" data-section="products">Products Report</a>
+        <a href="#" data-section="orders">Orders Report</a>
+        <a href="#" data-section="order-items">Order Items Report</a>
+        <a href="#" data-section="delivery-tasks">Delivery Tasks</a>
+    </nav>
+</aside>
+
+<main>
+    <!-- Analytics -->
+    <div id="analytics" class="admin-section">
+        <h1>Analytics Overview</h1>
+        <div class="card">
+            <canvas id="ordersChart"></canvas>
+        </div>
+        <div class="card">
+            <canvas id="topProductsChart"></canvas>
+        </div>
+        <div class="card">
+            <canvas id="deliveryChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Users Report -->
+    <div id="users" class="admin-section" style="display:none;">
+        <h1>Users Report</h1>
+        <table id="usersTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Contact</th>
+                    <th>Pincode</th>
+                    <th>Farm Info</th>
+                    <th>Created At</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <!-- Products Report -->
+    <div id="products" class="admin-section" style="display:none;">
+        <h1>Products Report</h1>
+        <table id="productsTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Qty</th>
+                    <th>Farmer</th>
+                    <th>Description</th>
+                    <th>Created At</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <!-- Orders Report -->
+    <div id="orders" class="admin-section" style="display:none;">
+        <h1>Orders Report</h1>
+        <table id="ordersTable">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Buyer</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Created At</th>
+                    <th># Items</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <!-- Order Items Report -->
+    <div id="order-items" class="admin-section" style="display:none;">
+        <h1>Order Items Report</h1>
+        <table id="orderItemsTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Order ID</th>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <!-- Delivery Tasks -->
+    <div id="delivery-tasks" class="admin-section" style="display:none;">
+        <h1>Delivery Tasks</h1>
+        <table id="deliveryTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Order ID</th>
+                    <th>Agent ID</th>
+                    <th>Pickup</th>
+                    <th>Delivery</th>
+                    <th>Status</th>
+                    <th>Created At</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const navLinks = document.querySelectorAll('.sidebar-nav a');
+    const sections = document.querySelectorAll('.admin-section');
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', e => {
+            e.preventDefault();
+            navLinks.forEach(nav => nav.classList.remove('active'));
+            sections.forEach(sec => sec.style.display = 'none');
+            link.classList.add('active');
+            document.getElementById(link.dataset.section).style.display = 'block';
+            loadSection(link.dataset.section);
+        });
+    });
+
+    async function loadSection(section) {
+        try {
+            switch(section){
+                case 'users':
+                    const usersRes = await fetch('http://localhost:5000/api/users');
+                    const users = await usersRes.json();
+                    const usersTbody = document.querySelector('#usersTable tbody');
+                    usersTbody.innerHTML = '';
+                    users.forEach(u => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${u.id}</td>
+                            <td>${u.userType}</td>
+                            <td>${u.fullName}</td>
+                            <td>${u.email}</td>
+                            <td>${u.contact}</td>
+                            <td>${u.pincode}</td>
+                            <td>${u.farmName || ''} / ${u.farmLocation || ''}</td>
+                            <td>${u.createdAt || ''}</td>
+                        `;
+                        usersTbody.appendChild(tr);
+                    });
+                    break;
+
+                case 'products':
+                    const prodRes = await fetch('http://localhost:5000/api/products');
+                    const products = await prodRes.json();
+                    const prodTbody = document.querySelector('#productsTable tbody');
+                    prodTbody.innerHTML = '';
+                    products.forEach(p => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${p.id}</td>
+                            <td>${p.name}</td>
+                            <td>${p.category}</td>
+                            <td>₹${p.price}</td>
+                            <td>${p.quantity}</td>
+                            <td>${p.farmerName || ''}</td>
+                            <td>${p.description || ''}</td>
+                            <td>${p.created_at || ''}</td>
+                        `;
+                        prodTbody.appendChild(tr);
+                    });
+                    break;
+
+                case 'orders':
+                    const ordersRes = await fetch('http://localhost:5000/api/orders');
+                    const orders = await ordersRes.json();
+                    const ordersTbody = document.querySelector('#ordersTable tbody');
+                    ordersTbody.innerHTML = '';
+                    orders.forEach(o => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${o.id}</td>
+                            <td>${o.buyerName || ''}</td>
+                            <td>₹${o.total}</td>
+                            <td>${o.status}</td>
+                            <td>${o.created_at}</td>
+                            <td>${o.items_count}</td>
+                        `;
+                        ordersTbody.appendChild(tr);
+                    });
+                    break;
+
+                case 'order-items':
+                    const itemsRes = await fetch('http://localhost:5000/api/order-items');
+                    const items = await itemsRes.json();
+                    const itemsTbody = document.querySelector('#orderItemsTable tbody');
+                    itemsTbody.innerHTML = '';
+                    items.forEach(i => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${i.id}</td>
+                            <td>${i.order_id}</td>
+                            <td>${i.product_name}</td>
+                            <td>${i.quantity}</td>
+                            <td>₹${i.price}</td>
+                            <td>₹${i.quantity * i.price}</td>
+                        `;
+                        itemsTbody.appendChild(tr);
+                    });
+                    break;
+
+                case 'delivery-tasks':
+                   const delRes = await fetch('http://localhost:5000/api/delivery/admin/all');
+
+                    const tasks = await delRes.json();
+                    const delTbody = document.querySelector('#deliveryTable tbody');
+                    delTbody.innerHTML = '';
+                    tasks.forEach(t => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${t.id}</td>
+                            <td>${t.order_id}</td>
+                            <td>${t.agent_id}</td>
+                            <td>${t.pickup_name} (${t.pickup_location})</td>
+                            <td>${t.delivery_name} (${t.delivery_location})</td>
+                            <td>${t.status}</td>
+                            <td>${t.created_at}</td>
+                        `;
+                        delTbody.appendChild(tr);
+                    });
+                    break;
+
+                case 'analytics':
+                    loadAnalytics();
+                    break;
+            }
+        } catch(err){
+            console.error("Error loading section", section, err);
+        }
+    }
+
+    async function loadAnalytics(){
+        try {
+            // Orders over time
+            const ordersRes = await fetch('http://localhost:5000/api/orders');
+            const orders = await ordersRes.json();
+            const datesMap = {};
+            orders.forEach(o => {
+                const date = new Date(o.created_at).toLocaleDateString();
+                if(!datesMap[date]) datesMap[date] = 0;
+                datesMap[date] += 1;
+            });
+            const ctxOrders = document.getElementById('ordersChart').getContext('2d');
+            new Chart(ctxOrders, {
+                type: 'line',
+                data: {
+                    labels: Object.keys(datesMap),
+                    datasets: [{
+                        label: 'Orders Over Time',
+                        data: Object.values(datesMap),
+                        borderColor: '#2e7d32',
+                        fill: false,
+                        tension: 0.2
+                    }]
+                }
+            });
+
+            // Top 5 products by sales
+            const itemsRes = await fetch('http://localhost:5000/api/order-items');
+            const items = await itemsRes.json();
+            const productMap = {};
+            items.forEach(i => {
+                if(!productMap[i.product_name]) productMap[i.product_name] = 0;
+                productMap[i.product_name] += i.quantity;
+            });
+            const topProducts = Object.entries(productMap).sort((a,b)=>b[1]-a[1]).slice(0,5);
+            const ctxProd = document.getElementById('topProductsChart').getContext('2d');
+            new Chart(ctxProd, {
+                type: 'bar',
+                data: {
+                    labels: topProducts.map(p=>p[0]),
+                    datasets: [{
+                        label: 'Units Sold',
+                        data: topProducts.map(p=>p[1]),
+                        backgroundColor: '#2e7d32'
+                    }]
+                }
+            });
+
+            // Delivery status
+            const delRes = await fetch('http://localhost:5000/api/delivery-tasks');
+            const tasks = await delRes.json();
+            const statusMap = {};
+            tasks.forEach(t=>{
+                if(!statusMap[t.status]) statusMap[t.status]=0;
+                statusMap[t.status]++;
+            });
+            const ctxDel = document.getElementById('deliveryChart').getContext('2d');
+            new Chart(ctxDel, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(statusMap),
+                    datasets:[{
+                        label:'Delivery Status',
+                        data: Object.values(statusMap),
+                        backgroundColor: ['#2e7d32','#fbc02d','#e53935','#64b5f6']
+                    }]
+                }
+            });
+        } catch(err){
+            console.error("Error loading analytics", err);
+        }
+    }
+
+    // Load default section
+    loadSection('analytics');
+});
+</script>
+</body>
+</html>
+
+
+registrtion 
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register - HarvestHub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: url('images/marketreg.jpg') no-repeat center center fixed;
+      background-size: cover;
+      position: relative;
+    }
+
+    .auth-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      padding: 1rem 2rem;
+      background: rgba(255, 255, 255, 0.);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      color: #2e7d32;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      flex-wrap: wrap;
+      text-align: center;
+    }
+
+    .auth-header img {
+      height: 60px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .auth-header h1 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.5rem;
+      margin: 0;
+    }
+
+    @media (max-width: 600px) {
+      .auth-header {
+        flex-direction: column;
+        gap: 8px;
+        padding: 1rem;
+      }
+
+      .auth-header img {
+        height: 50px;
+      }
+
+      .auth-header h1 {
+        font-size: 2rem;
+      }
+    }
+
+    .auth-container {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 20px;
+      padding: 2rem;
+      max-width: 500px;
+      margin: 2rem auto;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .auth-form h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #2e7d32;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+      color: #2e7d32;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      padding: 0.6rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      background-color: rgba(255, 255, 255, 0.9);
+      color: #2e7d32;
+    }
+
+    .form-group input[readonly] {
+      background-color: #f0f0f0;
+    }
+
+    .user-type-options {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+    }
+
+    .checkbox-group input {
+      margin-right: 0.5rem;
+    }
+
+    .btn {
+      background-color: #2e7d32;
+      color: white;
+      padding: 0.75rem 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.2s ease;
+    }
+
+    .btn:hover {
+      background-color: #256d27;
+    }
+
+    .message {
+      margin-top: 1rem;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #2e7d32;
+    }
+
+    .password-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .password-wrapper input {
+      flex: 1;
+      padding-right: 2.5rem;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 10px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      color: #888;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <header class="auth-header">
+    <img src="images/bglogo.png" alt="Harvest Hub Logo">
+    <h1>HarvestHub</h1>
+  </header>
+
+  <main class="auth-container">
+    <form id="registerForm" class="auth-form">
+      <h2>Create an Account</h2>
+
+      <div class="form-group">
+        <label>User Type</label>
+        <div class="user-type-options">
+          <label><input type="radio" name="userType" value="farmer" required /> I am a Farmer</label>
+          <label><input type="radio" name="userType" value="buyer" required /> I am a Buyer</label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="fullName">Full Name / Business Name</label>
+        <input type="text" id="fullName" required />
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" required />
+      </div>
+
+      <div class="form-group">
+        <label for="contact">Contact Number</label>
+        <input type="text" id="contact" maxlength="10" required />
+      </div>
+
+      <div class="form-group">
+        <label for="pincode">Pincode</label>
+        <input type="text" id="pincode" maxlength="6" required />
+      </div>
+
+      <div class="form-group">
+        <label for="autofillLocation">Detected Location</label>
+        <input type="text" id="autofillLocation" readonly />
+      </div>
+
+      <div class="form-group">
+        <label for="dob">Date of Birth</label>
+        <input type="date" id="dob" required />
+      </div>
+
+      <div class="form-group password-group">
+        <label for="password">Password</label>
+        <div class="password-wrapper">
+          <input type="password" id="password" required />
+          <span class="toggle-password" onclick="togglePassword('password', this)">🙈</span>
+        </div>
+      </div>
+
+      <div class="form-group password-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <div class="password-wrapper">
+          <input type="password" id="confirmPassword" required />
+          <span class="toggle-password" onclick="togglePassword('confirmPassword', this)">🙈</span>
+        </div>
+      </div>
+
+      <div id="farmerFields" style="display: none;">
+        <div class="form-group">
+          <label for="farmName">Farm Name</label>
+          <input type="text" id="farmName" />
+        </div>
+
+        <div class="form-group">
+          <label for="farmLocation">Farm Location</label>
+          <input type="text" id="farmLocation" />
+        </div>
+
+        <div class="form-group">
+          <label for="farmDescription">Brief Description</label>
+          <textarea id="farmDescription" rows="3"></textarea>
+        </div>
+      </div>
+
+      <div class="form-group checkbox-group">
+        <input type="checkbox" id="terms" required />
+        <label for="terms">I accept the Terms & Conditions</label>
+      </div>
+
+      <div class="form-group">
+        <button type="submit" class="btn">Register</button>
+      </div>
+
+      <div id="registerMessage" class="message"></div>
+
+    <div class="form-group">
+     <label for="profilePhoto">Profile Photo (optional)</label>
+    <input type="file" id="profilePhoto" name="profilePhoto" accept="image/*" />
+   </div>
+
+
+
+
+
+    </form>
+  </main>
+
+  <script>
+  // Show farmer-specific fields
+  const userTypeRadios = document.querySelectorAll('input[name="userType"]');
+  const farmerFields = document.getElementById('farmerFields');
+
+  userTypeRadios.forEach(radio => {
+    radio.addEventListener('change', () => {
+      farmerFields.style.display = radio.value === 'farmer' ? 'block' : 'none';
+    });
+  });
+
+  // Auto-detect location using pincode
+  const pincodeInput = document.getElementById('pincode');
+  const locationInput = document.getElementById('autofillLocation');
+
+  pincodeInput.addEventListener('blur', () => {
+    const pincode = pincodeInput.value.trim();
+    if (pincode.length === 6 && /^[0-9]+$/.test(pincode)) {
+      fetch(`https://api.postalpincode.in/pincode/${pincode}`)
+        .then(response => response.json())
+        .then(data => {
+          const info = data[0];
+          if (info.Status === "Success") {
+            const postOffice = info.PostOffice[0];
+            locationInput.value = `${postOffice.District}, ${postOffice.State}`;
+          } else {
+            locationInput.value = "Invalid Pincode";
+          }
+        })
+        .catch(() => {
+          locationInput.value = "Error fetching location";
+        });
+    } else {
+      locationInput.value = "Invalid Pincode format";
+    }
+  });
+
+  // Handle password toggle
+  function togglePassword(id, el) {
+    const input = document.getElementById(id);
+    if (input.type === "password") {
+      input.type = "text";
+      el.textContent = "👁️";
+    } else {
+      input.type = "password";
+      el.textContent = "🙈";
+    }
+  }
+
+  // Form submit – send data to backend
+  document.getElementById('registerForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const userType = document.querySelector('input[name="userType"]:checked')?.value;
+    const fullName = document.getElementById('fullName').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const contact = document.getElementById('contact').value.trim();
+    const pincode = document.getElementById('pincode').value.trim();
+    const location = document.getElementById('autofillLocation').value.trim();
+    const dob = document.getElementById('dob').value;
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+
+    const farmName = document.getElementById('farmName').value.trim();
+    const farmLocation = document.getElementById('farmLocation').value.trim();
+    const farmDescription = document.getElementById('farmDescription').value.trim();
+
+    const termsAccepted = document.getElementById('terms').checked;
+
+    if (!userType || !fullName || !email || !contact || !pincode || !dob || !password || !confirmPassword) {
+      document.getElementById('registerMessage').textContent = 'All fields are required';
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      document.getElementById('registerMessage').textContent = 'Passwords do not match';
+      return;
+    }
+
+    if (!termsAccepted) {
+      document.getElementById('registerMessage').textContent = 'You must accept the Terms & Conditions';
+      return;
+    }
+
+    const payload = {
+      userType,
+      fullName,
+      email,
+      contact,
+      pincode,
+      location,
+      dob,
+      password,
+      farmName: userType === 'farmer' ? farmName : null,
+      farmLocation: userType === 'farmer' ? farmLocation : null,
+      farmDescription: userType === 'farmer' ? farmDescription : null
+    };
+
+    try {
+      const res = await fetch('http://localhost:5000/api/users/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        document.getElementById('registerMessage').textContent = 'Registration successful!';
+        document.getElementById('registerForm').reset();
+        farmerFields.style.display = 'none';
+      } else {
+        document.getElementById('registerMessage').textContent = data.error || 'Registration failed';
+      }
+    } catch (err) {
+      console.error(err);
+      document.getElementById('registerMessage').textContent = 'Server error';
+    }
+  });
+</script>
+
+</body>
+</html>
+
+
+
+productroutes...
+
+const express = require("express");
+const router = express.Router();
+const db = require("../db");
+const multer = require("multer");
+const path = require("path");
+
+// ✅ Define base URL once at the top
+const BASE_URL = process.env.BASE_URL || "http://localhost:5000";
+
+// ================================
+// Multer storage configuration
+// ================================
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/");
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
+});
+const upload = multer({ storage });
+
+// ================================
+// POST: Add new product
+// ================================
+router.post("/", upload.single("image"), (req, res) => {
+  const { name, category, price, quantity, description, farmer_id, mandi } = req.body;
+  const image = req.file ? req.file.filename : null;
+
+  if (!name || !category || !price || !quantity || !farmer_id || !mandi) {
+    return res.status(400).json({ error: "All required fields must be filled" });
+  }
+
+  const sql = `
+    INSERT INTO products 
+      (name, category, price, quantity, image_url, description, farmer_id, mandi) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  db.query(sql, [name, category, price, quantity, image, description, farmer_id, mandi], (err, result) => {
+    if (err) {
+      console.error("Database error:", err);
+      return res.status(500).json({ error: "Database error", details: err });
+    }
+    res.status(201).json({ message: "✅ Product added successfully", productId: result.insertId });
+  });
+});
+
+// ================================
+// GET: Fetch all products
+// ================================
+router.get("/", (req, res) => {
+  const sql = `
+    SELECT p.*, u.fullName AS farmer_name
+    FROM products p
+    LEFT JOIN users u ON p.farmer_id = u.id
+    ORDER BY p.id DESC
+  `;
+
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error("Database error:", err);
+      return res.status(500).json({ error: "Database error" });
+    }
+
+    results.forEach(p => {
+      if (p.image_url) p.image_url = `${BASE_URL}/uploads/${p.image_url}`;
+    });
+
+    res.json(results);
+  });
+});
+
+module.exports = router;
+

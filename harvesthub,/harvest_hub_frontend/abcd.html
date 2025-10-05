@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HarvestHub Marketplace</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #2e7d32;
+      --secondary-color: #dcedc8;
+      --text-color: #333;
+      --card-bg: rgba(255, 255, 255, 0.95);
+      --header-bg: rgba(255, 255, 255, 0.85);
+      --red-flag: #e53935;
+      --yellow-flag: #fbc02d;
+      --blue-flag: #1976d2;
+      --live-auction-color: #e53935;
+      --upcoming-auction-color: #ff9800;
+      --scheduled-auction-color: #1976d2;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(rgba(240, 245, 230, 0.9), rgba(240, 245, 230, 0.9)), url('images/market_bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: var(--text-color);
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background: var(--header-bg);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo img { height: 45px; }
+    .logo h1 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; color: var(--primary-color); font-weight: 700; }
+
+    .welcome-message { font-size: 1.1rem; font-weight: 500; color: var(--primary-color); flex: 1; text-align: center; }
+
+    .search-bar { flex: 1; margin: 0 2rem; max-width: 500px; }
+    .search-bar input { width: 100%; padding: 0.75rem 1rem; border-radius: 25px; border: 1px solid #ddd; font-size: 1rem; transition: box-shadow 0.3s ease; }
+    .search-bar input:focus { outline: none; box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.2); }
+
+    .icons { display: flex; gap: 1.5rem; align-items: center; }
+    .icons .icon-btn { font-size: 1.25rem; cursor: pointer; color: var(--primary-color); transition: transform 0.2s ease, color 0.2s ease; text-decoration: none; }
+    .icons .icon-btn:hover { transform: scale(1.1); color: #388e3c; }
+    .icons .logout-btn { font-size: 0.9rem; font-weight: 500; padding: 0.5rem 1rem; background-color: var(--red-flag); color: white; border-radius: 8px; text-decoration: none; }
+
+    .main-content { display: flex; flex-wrap: wrap; gap: 2rem; padding: 1.5rem 2rem; }
+    .auction-banner { flex: 0 1 280px; min-width: 250px; background: var(--card-bg); border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.08); height: fit-content; display: flex; flex-direction: column; }
+    .auction-banner h3 { font-size: 1.5rem; color: var(--primary-color); margin-bottom: 1rem; text-align: center; }
+    .live-auctions-list { display: flex; flex-direction: column; gap: 1rem; }
+    .auction-card { background-color: var(--card-bg); padding: 0.75rem; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); display: flex; gap: 1rem; align-items: center; }
+    .auction-card img { width: 60px; height: 60px; border-radius: 6px; object-fit: cover; }
+    .auction-info { flex-grow: 1; overflow: hidden; }
+    .auction-info h4 { font-size: 1rem; font-weight: 600; margin-bottom: 0.25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .auction-info p { font-size: 0.85rem; color: #666; line-height: 1.2; }
+    .auction-timer { font-size: 0.9rem; font-weight: 700; color: var(--live-auction-color); margin-top: 0.5rem; }
+    .auction-bid-btn { background-color: var(--primary-color); color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 6px; font-weight: 500; font-size: 0.85rem; transition: background-color 0.2s ease; white-space: nowrap; }
+    .auction-bid-btn:hover { background-color: #388e3c; }
+    .view-all-auctions { margin-top: 1.5rem; text-align: center; display: block; padding: 0.75rem 1.5rem; background-color: var(--primary-color); color: white; text-decoration: none; border-radius: 8px; font-weight: 500; transition: background-color 0.2s ease; }
+    .view-all-auctions:hover { background-color: #388e3c; }
+
+    .product-grid-container { flex: 1 1 0%; min-width: 0; overflow: visible; }
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 2rem; }
+    .product-card { background: var(--card-bg); border-radius: 12px; padding: 1.25rem; box-shadow: 0 4px 12px rgba(0,0,0,0.08); position: relative; overflow: visible; transition: transform 0.3s ease, box-shadow 0.3s ease; display: flex; flex-direction: column; }
+    .product-card:hover { transform: translateY(-5px); box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
+    .product-card img { width: 100%; border-radius: 8px; height: 180px; object-fit: cover; transition: transform 0.3s ease; }
+    .product-card:hover img { transform: scale(1.05); }
+    .product-info { margin-top: 1rem; flex-grow: 1; }
+    .product-info h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.25rem; color: var(--text-color); }
+    .product-info p { font-size: 0.9rem; color: #666; margin-bottom: 0.5rem; }
+    .buy-btn { display: block; width: 100%; padding: 0.75rem; background-color: var(--primary-color); color: white; text-align: center; border: none; border-radius: 8px; margin-top: 1rem; cursor: pointer; font-size: 1rem; font-weight: 500; transition: background-color 0.2s ease; }
+    .buy-btn:hover { background-color: #388e3c; }
+
+    .farmer-info { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; }
+    .farmer-info img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; }
+
+    #no-results { display: none; margin-top: 1rem; font-weight: 500; color: #e53935; text-align: center; }
+
+    @media (max-width: 992px) { .main-content { flex-direction: column; } .auction-banner, .product-grid-container { flex-basis: 100%; min-width: unset; } }
+    @media (max-width: 768px) { header { flex-wrap: wrap; padding: 1rem; } .logo { flex-grow: 1; } .search-bar { order: 3; margin: 1rem 0; width: 100%; } .icons { order: 2; } .main-content { padding: 1rem; } .product-grid { gap: 1rem; } }
+  </style>
+</head>
+<body>
+<header>
+  <div class="logo">
+    <img src="images/bglogo.png" alt="Harvest Hub Logo">
+    <h1>HarvestHub</h1>
+  </div>
+  <span class="welcome-message" id="welcomeMsg">Welcome to the Marketplace!</span>
+  <div class="search-bar">
+    <input type="text" placeholder="Search for products or farms..." id="searchInput">
+  </div>
+  <div class="icons">
+    <a href="auctions.html" class="icon-btn" title="Auctions"><i class="fas fa-gavel"></i></a>
+    <span class="icon-btn" id="filter-btn" title="Filters"><i class="fas fa-filter"></i></span>
+    <span class="icon-btn" id="fav-btn" title="Favorites"><i class="fas fa-heart"></i></span>
+    <span class="icon-btn" id="cart-btn" title="Cart"><i class="fas fa-shopping-cart"></i></span>
+    <a href="user-profile.html" class="icon-btn" id="profile-btn" title="Profile"><i class="fas fa-user-circle"></i></a>
+    <a href="intex.html" class="logout-btn" id="logout-btn">Log Out</a>
+  </div>
+</header>
+
+<main class="main-content">
+  <aside class="auction-banner">
+    <h3>Live Auctions</h3>
+    <div id="live-auctions-list" class="live-auctions-list"></div>
+    <a href="auctions.html" class="view-all-auctions">View all Auctions</a>
+  </aside>
+
+  <div class="product-grid-container">
+    <span class="local-harvests-heading" id="local-harvests-heading">Local Harvests</span>
+    <div class="product-grid" id="productGrid"></div>
+    <div id="no-results">No products found. Try adjusting your search or filters.</div>
+  </div>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const userProfile = JSON.parse(localStorage.getItem('userProfile'));
+  if (!userProfile) window.location.href = "login.html";
+
+  document.getElementById('welcomeMsg').textContent = `Welcome, ${userProfile.fullName || 'Guest'}!`;
+  document.getElementById('local-harvests-heading').textContent = `Local Harvests in ${userProfile.location || 'Your Location'}`;
+
+  const searchInput = document.getElementById('searchInput');
+  const productGrid = document.getElementById("productGrid");
+  const noResultsMsg = document.getElementById('no-results');
+
+  const priceRange = document.getElementById('price-range');
+  const priceValueSpan = document.getElementById('price-value');
+  const organicFilter = document.getElementById('organic-filter');
+  const inStockFilter = document.getElementById('in-stock-filter');
+  const sortBy = document.getElementById('sort-by');
+
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const saveCart = () => localStorage.setItem('cart', JSON.stringify(cart));
+
+  const addToCart = (product) => {
+    const existing = cart.find(i => i.id === product.id);
+    if (existing) existing.quantity++;
+    else cart.push({ ...product, quantity: 1 });
+    saveCart();
+    alert(`${product.name} added to cart!`);
+  };
+
+  let products = [];
+
+  const renderProducts = () => {
+    productGrid.innerHTML = '';
+    let visibleCount = 0;
+
+    products.forEach(p => {
+      const matchesSearch = p.name.toLowerCase().includes(searchInput.value.toLowerCase());
+      const matchesPrice = !priceRange || p.price <= parseInt(priceRange.value || Infinity);
+      const matchesOrganic = !organicFilter || !organicFilter.checked || p.organic;
+      const matchesInStock = !inStockFilter || !inStockFilter.checked || p.quantity > 0;
+
+      if (matchesSearch && matchesPrice && matchesOrganic && matchesInStock) {
+        visibleCount++;
+        const card = document.createElement('div');
+        card.classList.add('product-card');
+        card.innerHTML = `
+          <img src="http://localhost:5000/uploads/${p.image_url}" alt="${p.name}">
+          <div class="product-info">
+            <h4>${p.name}</h4>
+            <p>₹${p.price}</p>
+            <p>${p.quantity} available</p>
+            <div class="farmer-info">
+              <img src="http://localhost:5000/uploads/${p.farmer_profile || 'default_farm.png'}" alt="${p.farmer_name}">
+              <span>${p.farmer_name}</span>
+            </div>
+          </div>
+          <button class="buy-btn">Buy Now</button>
+        `;
+        productGrid.appendChild(card);
+
+        card.querySelector('.buy-btn').addEventListener('click', () => {
+          addToCart({
+            id: p.id,
+            name: p.name,
+            price: p.price,
+            image: `http://localhost:5000/uploads/${p.image_url}`
+          });
+        });
+      }
+    });
+
+    noResultsMsg.style.display = visibleCount === 0 ? 'block' : 'none';
+  };
+
+  searchInput.addEventListener('input', renderProducts);
+
+  fetch("http://localhost:5000/api/products")
+    .then(res => res.json())
+    .then(data => { products = data; renderProducts(); })
+    .catch(err => console.error(err));
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HarvestHub Auctions</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #2e7d32;
+      --secondary-color: #dcedc8;
+      --text-color: #333;
+      --card-bg: rgba(255, 255, 255, 0.95);
+      --header-bg: rgba(255, 255, 255, 0.85);
+      --live-auction-color: #e53935;
+      --upcoming-auction-color: #ff9800;
+      --scheduled-auction-color: #1976d2;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(rgba(240, 245, 230, 0.9), rgba(240, 245, 230, 0.9)), url('images/market_bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: var(--text-color);
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background: var(--header-bg);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo img {
+      height: 45px;
+    }
+
+    .logo h1 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.2rem;
+      color: var(--primary-color);
+      font-weight: 700;
+    }
+
+    .welcome-message {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--primary-color);
+      flex: 1;
+      text-align: center;
+    }
+
+    .search-bar {
+      flex: 1;
+      margin: 0 2rem;
+      max-width: 500px;
+    }
+
+    .search-bar input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border-radius: 25px;
+      border: 1px solid #ddd;
+      font-size: 1rem;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .search-bar input:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.2);
+    }
+
+    .icons {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .icons .icon-btn {
+      font-size: 1.25rem;
+      cursor: pointer;
+      color: var(--primary-color);
+      transition: transform 0.2s ease, color 0.2s ease;
+      text-decoration: none;
+    }
+
+    .icons .icon-btn:hover {
+      transform: scale(1.1);
+      color: #388e3c;
+    }
+
+    .icons .active-page {
+        color: var(--live-auction-color);
+    }
+    
+    .icons .logout-btn {
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      background-color: var(--live-auction-color);
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+    }
+    
+    .page-title {
+        text-align: center;
+        padding: 2rem;
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .auction-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      padding: 1.5rem 2rem;
+    }
+
+    .auction-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      border: 2px solid transparent;
+    }
+    
+    .auction-card.live {
+        border-color: var(--live-auction-color);
+        box-shadow: 0 4px 12px rgba(229, 57, 53, 0.2);
+    }
+    
+    .auction-card.upcoming {
+        border-color: var(--upcoming-auction-color);
+        box-shadow: 0 4px 12px rgba(255, 152, 0, 0.2);
+    }
+
+    .auction-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    }
+    
+    .auction-status {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.8rem;
+    }
+    
+    .auction-status.live { background-color: var(--live-auction-color); }
+    .auction-status.upcoming { background-color: var(--upcoming-auction-color); }
+    .auction-status.scheduled { background-color: var(--scheduled-auction-color); }
+    
+    .auction-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+      transition: transform 0.3s ease;
+    }
+    
+    .auction-card:hover img {
+        transform: scale(1.05);
+    }
+
+    .auction-info {
+      margin-top: 1rem;
+      flex-grow: 1;
+    }
+
+    .auction-info h4 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text-color);
+    }
+
+    .auction-info p {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 0.25rem;
+    }
+
+    .auction-info .current-bid {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-top: 0.5rem;
+    }
+
+    .auction-info .countdown {
+        font-size: 1rem;
+        font-weight: 500;
+        color: #999;
+        margin-top: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .countdown i {
+        color: var(--live-auction-color);
+    }
+
+    .bid-btn {
+      display: block;
+      width: 100%;
+      padding: 0.75rem;
+      background-color: var(--primary-color);
+      color: white;
+      text-align: center;
+      border: none;
+      border-radius: 8px;
+      margin-top: 1rem;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: background-color 0.2s ease, transform 0.1s ease;
+    }
+
+    .bid-btn:hover {
+      background-color: #388e3c;
+      transform: translateY(-2px);
+    }
+    
+    .bid-btn:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+        transform: none;
+    }
+    
+    .message-box {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: var(--card-bg);
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        z-index: 1001;
+        display: none;
+        text-align: center;
+    }
+    
+    .message-box.show {
+        display: block;
+    }
+    
+    .message-box h3 {
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+    
+    .message-box p {
+        margin-bottom: 1.5rem;
+    }
+    
+    .message-box button {
+        padding: 0.75rem 1.5rem;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+    footer {
+      background: var(--header-bg);
+      backdrop-filter: blur(10px);
+      text-align: center;
+      padding: 1.5rem;
+      margin-top: 2rem;
+      border-top: 1px solid #eee;
+      color: #666;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-wrap: wrap;
+        padding: 1rem;
+      }
+      .logo { flex-grow: 1; }
+      .search-bar { order: 3; margin: 1rem 0; width: 100%; }
+      .icons { order: 2; }
+      .auction-container {
+        padding: 1rem;
+        gap: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <img src="images/bglogo.png" alt="Harvest Hub Logo">
+      <h1>HarvestHub</h1>
+    </div>
+    <span class="welcome-message" id="welcomeMsg">Welcome to the Auctions!</span>
+    <div class="search-bar">
+      <input type="text" placeholder="Search for auctions..." id="searchInput">
+    </div>
+    <div class="icons">
+      <a href="marketplace.html" class="icon-btn" title="Marketplace"><i class="fas fa-store"></i></a>
+      <a href="auctions.html" class="icon-btn active-page" title="Auctions"><i class="fas fa-gavel"></i></a>
+      <a href="#" class="icon-btn" title="Favorites"><i class="fas fa-heart"></i></a>
+      <a href="#" class="icon-btn" title="Cart"><i class="fas fa-shopping-cart"></i></a>
+      <a href="profile.html" class="icon-btn" id="profile-btn" title="Profile"><i class="fas fa-user-circle"></i></a>
+      <a href="index.html" class="logout-btn" id="logout-btn">Log Out</a>
+    </div>
+  </header>
+
+  <div class="page-title">
+    <span>Current and Upcoming Auctions</span>
+  </div>
+
+  <main class="auction-container" id="auction-grid">
+    <!-- Auction cards will be dynamically inserted here -->
+  </main>
+
+  <div id="message-box" class="message-box">
+    <h3 id="message-title"></h3>
+    <p id="message-text"></p>
+    <button id="message-close">OK</button>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 HarvestHub. All rights reserved.</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Dummy user profile for a personalized welcome message.
+      const userProfile = JSON.parse(localStorage.getItem('userProfile')) || {
+        name: 'Guest',
+        location: 'Your Location'
+      };
+      document.getElementById('welcomeMsg').textContent = `Welcome, ${userProfile.name}!`;
+
+      // Define auction data
+      const auctionsData = [
+        {
+          id: 1,
+          name: 'Organic Heirloom Tomatoes',
+          currentBid: 150,
+          endTime: new Date().getTime() + 1000 * 60 * 60 * 2, // 2 hours from now
+          image: 'images/tomato.jpg',
+          status: 'live'
+        },
+        {
+          id: 2,
+          name: 'Freshly Picked Apples (5kg)',
+          currentBid: 250,
+          endTime: new Date().getTime() + 1000 * 60 * 60 * 24, // 24 hours from now
+          image: 'images/apples.jpg',
+          status: 'live'
+        },
+        {
+          id: 3,
+          name: 'Artisan Cheese Wheel',
+          currentBid: 500,
+          endTime: new Date().getTime() + 1000 * 60 * 60 * 48, // 48 hours from now
+          image: 'images/cheese.jpg',
+          status: 'upcoming'
+        },
+        {
+          id: 4,
+          name: 'Locally Sourced Honey (2kg)',
+          currentBid: 300,
+          endTime: new Date().getTime() + 1000 * 60 * 60 * 72, // 72 hours from now
+          image: 'images/honey.jpg',
+          status: 'upcoming'
+        },
+        {
+          id: 5,
+          name: 'Farm Fresh Eggs (3 Dozen)',
+          currentBid: 180,
+          endTime: new Date().getTime() - 1000 * 60 * 60, // 1 hour ago (closed)
+          image: 'images/eggs.jpg',
+          status: 'closed'
+        }
+      ];
+
+      const auctionGrid = document.getElementById('auction-grid');
+      const messageBox = document.getElementById('message-box');
+      const messageTitle = document.getElementById('message-title');
+      const messageText = document.getElementById('message-text');
+      const messageCloseBtn = document.getElementById('message-close');
+
+      // Function to show a custom message box
+      function showMessage(title, text) {
+          messageTitle.textContent = title;
+          messageText.textContent = text;
+          messageBox.classList.add('show');
+      }
+
+      messageCloseBtn.addEventListener('click', () => {
+          messageBox.classList.remove('show');
+      });
+
+      // Function to render all auction cards
+      function renderAuctions() {
+        auctionGrid.innerHTML = ''; // Clear previous content
+        auctionsData.forEach(auction => {
+          const auctionCard = document.createElement('div');
+          // Add status as a class for styling
+          auctionCard.classList.add('auction-card', auction.status);
+          
+          const timeLeft = auction.endTime - new Date().getTime();
+          const isClosed = timeLeft <= 0;
+          
+          // Determine status text based on time left
+          const statusText = isClosed ? 'Closed' :
+            (auction.status === 'live' ? 'Live' :
+            (auction.status === 'upcoming' ? 'Upcoming' : 'Scheduled'));
+
+          auctionCard.innerHTML = `
+            <span class="auction-status ${auction.status}">${statusText}</span>
+            <img src="${auction.image}" alt="${auction.name}">
+            <div class="auction-info">
+              <h4>${auction.name}</h4>
+              <p>Current Bid:</p>
+              <span class="current-bid" id="bid-${auction.id}">₹${auction.currentBid}</span>
+              ${isClosed ? 
+                  `<p class="countdown"><i class="fas fa-clock"></i> Auction ended</p>` :
+                  `<p class="countdown"><i class="fas fa-clock"></i> <span id="countdown-${auction.id}"></span></p>`
+              }
+            </div>
+            <button class="bid-btn" data-id="${auction.id}" ${isClosed ? 'disabled' : ''}>${isClosed ? 'Auction Ended' : 'Place Bid'}</button>
+          `;
+          auctionGrid.appendChild(auctionCard);
+        });
+      }
+
+      // Function to update countdown timers
+      function updateTimers() {
+        auctionsData.forEach(auction => {
+          const countdownElement = document.getElementById(`countdown-${auction.id}`);
+          if (countdownElement && auction.status !== 'closed') {
+            const now = new Date().getTime();
+            const distance = auction.endTime - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            if (distance < 0) {
+              countdownElement.textContent = 'Auction ended';
+              auction.status = 'closed';
+              const bidButton = document.querySelector(`.bid-btn[data-id="${auction.id}"]`);
+              if (bidButton) {
+                bidButton.textContent = 'Auction Ended';
+                bidButton.disabled = true;
+              }
+              // Update the auction status display
+              const statusElement = bidButton.closest('.auction-card').querySelector('.auction-status');
+              if (statusElement) {
+                statusElement.textContent = 'Closed';
+                statusElement.classList.remove('live', 'upcoming', 'scheduled');
+                statusElement.classList.add('closed');
+              }
+            } else {
+              countdownElement.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+            }
+          }
+        });
+      }
+
+      // Event listener for bid buttons
+      auctionGrid.addEventListener('click', (e) => {
+        const target = e.target;
+        if (target.classList.contains('bid-btn')) {
+          const auctionId = parseInt(target.dataset.id);
+          const auction = auctionsData.find(a => a.id === auctionId);
+          if (auction.status === 'live') {
+            showMessage('Place a Bid', `You are about to place a bid on ${auction.name}. The current bid is ₹${auction.currentBid}. Bid logic would be implemented here.`);
+          } else {
+            showMessage('Auction Not Live', `This auction is currently ${auction.status}. You can place a bid when it is live.`);
+          }
+        }
+      });
+
+      // Initial render and start the timer
+      renderAuctions();
+      setInterval(updateTimers, 1000);
+
+      // Log out button logic
+      const logoutBtn = document.getElementById('logout-btn');
+      logoutBtn.addEventListener('click', (event) => {
+          event.preventDefault();
+          showMessage('Logged Out', 'You have been successfully logged out.');
+          localStorage.removeItem('cart');
+          localStorage.removeItem('userProfile');
+          window.location.href = logoutBtn.href;
+      });
+    });
+  </script>
+</body>
+</html>

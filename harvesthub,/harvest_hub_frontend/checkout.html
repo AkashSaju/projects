@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - HarvestHub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2e7d32;
+            --secondary-color: #dcedc8;
+            --text-color: #333;
+            --card-bg: rgba(255, 255, 255, 0.95);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(rgba(240, 245, 230, 0.9), rgba(240, 245, 230, 0.9)), url('images/market_bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: var(--text-color);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .checkout-container {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 800px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .checkout-container h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 1rem;
+        }
+
+        .section {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+        
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .order-summary-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .order-summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .order-item-details {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .order-item-details img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .order-total {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 1rem;
+            text-align: right;
+            color: var(--text-color);
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #666;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            font-size: 1rem;
+        }
+
+        .form-group input[readonly] {
+            background-color: #e9ecef;
+        }
+
+        .payment-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .payment-option {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: border-color 0.2s ease;
+        }
+
+        .payment-option:hover {
+            border-color: var(--primary-color);
+        }
+
+        .payment-option input[type="radio"] {
+            margin-top: 0;
+        }
+
+        .place-order-btn {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 2rem;
+            transition: background-color 0.2s ease;
+        }
+        
+        .place-order-btn:hover {
+            background-color: #388e3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="checkout-container">
+        <h1>Checkout</h1>
+
+        <div class="section">
+            <h2 class="section-title">Order Summary</h2>
+            <ul class="order-summary-list" id="order-summary-list">
+                </ul>
+            <div class="order-total" id="order-total">
+                Total: ₹0
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Delivery Information</h2>
+            <form id="delivery-form">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" value="Akash" required>
+                </div>
+                <div class="form-group">
+                    <label for="address">Full Address</label>
+                    <textarea id="address" rows="3" required>123 Harvest Street, Koramangala</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <input type="text" id="city" value="Bengaluru" required>
+                </div>
+                <div class="form-group">
+                    <label for="pincode">Pincode</label>
+                    <input type="text" id="pincode" value="560034" required>
+                </div>
+                <div class="form-group">
+                    <label for="contact">Contact Number</label>
+                    <input type="text" id="contact" value="9876543210" required>
+                </div>
+            </form>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Payment Method</h2>
+            <div class="payment-options">
+                <label class="payment-option">
+                    <input type="radio" name="paymentMethod" value="cod" checked>
+                    <span>Cash on Delivery</span>
+                </label>
+                <label class="payment-option">
+                    <input type="radio" name="paymentMethod" value="card">
+                    <span>Credit/Debit Card</span>
+                </label>
+                </div>
+        </div>
+
+        <button class="place-order-btn" id="place-order-btn">Place Order</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const orderSummaryList = document.getElementById('order-summary-list');
+            const orderTotalEl = document.getElementById('order-total');
+            const placeOrderBtn = document.getElementById('place-order-btn');
+
+            // 1. Retrieve cart items from localStorage
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            // 2. Render the order summary
+            const renderOrderSummary = () => {
+                orderSummaryList.innerHTML = '';
+                let total = 0;
+
+                if (cart.length === 0) {
+                    orderSummaryList.innerHTML = '<p>Your cart is empty. Please add items to checkout.</p>';
+                    placeOrderBtn.style.display = 'none';
+                    return;
+                }
+
+                cart.forEach(item => {
+                    const li = document.createElement('li');
+                    li.classList.add('order-summary-item');
+                    li.innerHTML = `
+                        <div class="order-item-details">
+                            <img src="${item.image}" alt="${item.name}">
+                            <span>${item.name} (x${item.quantity})</span>
+                        </div>
+                        <span>₹${item.price * item.quantity}</span>
+                    `;
+                    orderSummaryList.appendChild(li);
+                    total += item.price * item.quantity;
+                });
+
+                orderTotalEl.textContent = `Total: ₹${total}`;
+            };
+
+            // 3. Handle the "Place Order" button click
+            placeOrderBtn.addEventListener('click', () => {
+                // In a real application, you'd send data to the backend here.
+                // For this demo, we'll just show an alert and clear the cart.
+                alert('Order Placed Successfully! Thank you for your purchase.');
+                
+                // Clear the cart and redirect to the homepage
+                localStorage.removeItem('cart');
+                window.location.href = 'marketplace.html';
+            });
+            
+            // Initial render
+            renderOrderSummary();
+        });
+    </script>
+</body>
+</html>

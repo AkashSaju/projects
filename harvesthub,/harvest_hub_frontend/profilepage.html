@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Profile - HarvestHub</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f5f5f5; padding: 20px; }
+    form { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 8px; }
+    input, textarea, select, button { width: 100%; margin: 8px 0; padding: 10px; }
+    button { background: green; color: white; font-weight: bold; border: none; cursor: pointer; }
+    button:hover { background: darkgreen; }
+  </style>
+</head>
+<body>
+  <h1>My Profile</h1>
+  <form id="profileForm">
+    <select id="userType" required>
+      <option value="farmer">Farmer</option>
+      <option value="buyer">Buyer</option>
+      <option value="admin">Admin</option>
+    </select>
+    <input type="text" id="fullName" placeholder="Full Name" required>
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="text" id="contact" placeholder="Contact Number">
+    <input type="text" id="pincode" placeholder="Pincode">
+    <input type="text" id="location" placeholder="Location">
+    <input type="date" id="dob" placeholder="Date of Birth">
+    <input type="text" id="farmName" placeholder="Farm Name">
+    <input type="text" id="farmLocation" placeholder="Farm Location">
+    <textarea id="farmDescription" placeholder="Farm Description"></textarea>
+    <button type="submit">Update Profile</button>
+  </form>
+  <p id="message"></p>
+
+  <script>
+    const userProfile = JSON.parse(localStorage.getItem("userProfile"));
+if (!userProfile) {
+  // Not logged in → redirect to login
+  window.location.href = "login.html";
+}
+
+const userId = userProfile.id; // Use actual logged-in user ID
+
+
+    // ✅ Load profile data
+    async function loadProfile() {
+      try {
+        const res = await fetch(`http://localhost:5000/api/users/${userId}`);
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+
+        document.getElementById("userType").value = data.userType || "farmer";
+        document.getElementById("fullName").value = data.fullName || "";
+        document.getElementById("email").value = data.email || "";
+        document.getElementById("contact").value = data.contact || "";
+        document.getElementById("pincode").value = data.pincode || "";
+        document.getElementById("location").value = data.location || "";
+        document.getElementById("dob").value = data.dob ? data.dob.split("T")[0] : "";
+        document.getElementById("farmName").value = data.farmName || "";
+        document.getElementById("farmLocation").value = data.farmLocation || "";
+        document.getElementById("farmDescription").value = data.farmDescription || "";
+      } catch (err) {
+        document.getElementById("message").textContent = "⚠️ Failed to load profile";
+        document.getElementById("message").style.color = "red";
+      }
+    }
+
+    // ✅ Update profile
+    document.getElementById("profileForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const payload = {
+        userType: document.getElementById("userType").value,
+        fullName: document.getElementById("fullName").value,
+        email: document.getElementById("email").value,
+        contact: document.getElementById("contact").value,
+        pincode: document.getElementById("pincode").value,
+        location: document.getElementById("location").value,
+        dob: document.getElementById("dob").value,
+        farmName: document.getElementById("farmName").value,
+        farmLocation: document.getElementById("farmLocation").value,
+        farmDescription: document.getElementById("farmDescription").value,
+      };
+
+      try {
+        const res = await fetch(`http://localhost:5000/api/users/${userId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+        const result = await res.json();
+        document.getElementById("message").textContent = res.ok ? "✅ Profile Updated!" : result.error;
+        document.getElementById("message").style.color = res.ok ? "green" : "red";
+      } catch (err) {
+        document.getElementById("message").textContent = "⚠️ Server error";
+        document.getElementById("message").style.color = "red";
+      }
+    });
+
+    loadProfile();
+  </script>
+</body>
+</html>

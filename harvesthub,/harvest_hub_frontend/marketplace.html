@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HarvestHub Marketplace</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #2e7d32;
+      --secondary-color: #dcedc8;
+      --text-color: #333;
+      --card-bg: rgba(255, 255, 255, 0.95);
+      --header-bg: rgba(255, 255, 255, 0.85);
+      --red-flag: #e53935;
+      --live-auction-color: #e53935;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(rgba(240, 245, 230, 0.9), rgba(240, 245, 230, 0.9)), url('images/market_bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: var(--text-color);
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background: var(--header-bg);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .logo { display: flex; align-items: center; gap: 10px; }
+    .logo img { height: 45px; }
+    .logo h1 { font-family: 'Dancing Script', cursive; font-size: 2.2rem; color: var(--primary-color); font-weight: 700; }
+
+    .welcome-message { font-size: 1.1rem; font-weight: 500; color: var(--primary-color); flex: 1; text-align: center; }
+
+    .search-bar { flex: 1; margin: 0 2rem; max-width: 500px; }
+    .search-bar input { width: 100%; padding: 0.75rem 1rem; border-radius: 25px; border: 1px solid #ddd; font-size: 1rem; transition: box-shadow 0.3s ease; }
+    .search-bar input:focus { outline: none; box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.2); }
+
+    .icons { display: flex; gap: 1.5rem; align-items: center; position: relative; }
+    .icons .icon-btn { font-size: 1.25rem; cursor: pointer; color: var(--primary-color); transition: transform 0.2s ease, color 0.2s ease; text-decoration: none; position: relative; }
+    .icons .icon-btn:hover { transform: scale(1.1); color: #388e3c; }
+    .icons .logout-btn { font-size: 0.9rem; font-weight: 500; padding: 0.5rem 1rem; background-color: var(--red-flag); color: white; border-radius: 8px; text-decoration: none; }
+
+    /* cart count badge */
+    .cart-count {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      background: var(--red-flag);
+      color: white;
+      font-size: 0.75rem;
+      width: 18px;
+      height: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      font-weight: 700;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    .main-content { display: flex; flex-wrap: wrap; gap: 2rem; padding: 1.5rem 2rem; }
+    .auction-banner { flex: 0 1 280px; min-width: 250px; background: var(--card-bg); border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.08); display: flex; flex-direction: column; }
+    .auction-banner h3 { font-size: 1.5rem; color: var(--primary-color); margin-bottom: 1rem; text-align: center; }
+
+    .product-grid-container { flex: 1 1 0%; min-width: 0; }
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 2rem; }
+    .product-card { background: var(--card-bg); border-radius: 12px; padding: 1.25rem; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transition: transform 0.3s ease, box-shadow 0.3s ease; display: flex; flex-direction: column; }
+    .product-card:hover { transform: translateY(-5px); box-shadow: 0 6px 16px rgba(0,0,0,0.12); }
+    .product-card img { width: 100%; border-radius: 8px; height: 180px; object-fit: cover; transition: transform 0.3s ease; }
+    .product-card:hover img { transform: scale(1.05); }
+    .product-info { margin-top: 1rem; flex-grow: 1; }
+    .product-info h4 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.25rem; color: var(--text-color); }
+    .product-info p { font-size: 0.9rem; color: #666; margin-bottom: 0.25rem; }
+    .buy-btn { display: block; width: 100%; padding: 0.75rem; background-color: var(--primary-color); color: white; text-align: center; border: none; border-radius: 8px; margin-top: 1rem; cursor: pointer; font-size: 1rem; font-weight: 500; transition: background-color 0.2s ease; }
+    .buy-btn:hover { background-color: #388e3c; }
+
+    .farmer-info { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; }
+    .farmer-info img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; }
+    .farmer-info a { text-decoration: none; color: var(--primary-color); font-weight: 500; }
+    #no-results { display: none; margin-top: 1rem; font-weight: 500; color: #e53935; text-align: center; }
+
+    /* Cart sidebar */
+    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; z-index: 900; }
+    .cart-sidebar {
+      position: fixed;
+      right: -420px;
+      top: 0;
+      height: 100vh;
+      width: 380px;
+      background: #fff;
+      z-index: 1001;
+      box-shadow: -8px 0 24px rgba(0,0,0,0.15);
+      transition: right 0.28s ease;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .cart-sidebar.open { right: 0; }
+    .cart-sidebar h3 { margin-bottom: 10px; color: var(--primary-color); }
+    .cart-items { flex: 1; overflow-y: auto; min-height: 0; }
+    .cart-item { display: flex; gap: 10px; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid #eee; }
+    .cart-item img { width: 64px; height: 64px; object-fit: cover; border-radius: 8px; }
+    .cart-item .meta { flex: 1; }
+    .cart-item .meta h4 { font-size: 0.95rem; margin-bottom: 4px; }
+    .cart-item .meta p { font-size: 0.85rem; color: #666; }
+    .cart-item .controls { display:flex; gap:6px; align-items:center; }
+    .qty-btn { background:#f0f0f0; border:none; border-radius:4px; padding:6px 8px; cursor:pointer; }
+    .remove-btn { background:transparent; border:none; color:#e53935; cursor:pointer; font-size:1rem; padding:6px; }
+
+    .cart-summary { margin-top: 10px; border-top: 1px solid #eee; padding-top: 10px; }
+    .cart-summary .total { display:flex; justify-content:space-between; font-weight:700; margin-bottom:10px; }
+    .checkout-btn { width: 100%; padding: 10px; border: none; border-radius: 8px; background: var(--primary-color); color: white; cursor: pointer; font-weight:700; }
+    .close-cart { background:transparent; border:none; font-size:1.2rem; cursor:pointer; color:#333; position:absolute; top:8px; right:12px; }
+
+    @media (max-width: 768px) {
+      .cart-sidebar { width: 100%; right: -100%; }
+      .cart-sidebar.open { right: 0; }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="logo">
+    <img src="images/bglogo.png" alt="Harvest Hub Logo">
+    <h1>HarvestHub</h1>
+  </div>
+  <span class="welcome-message" id="welcomeMsg">Welcome to the Marketplace!</span>
+  <div class="search-bar">
+    <input type="text" placeholder="Search for products or farms..." id="searchInput">
+  </div>
+  <div class="icons">
+    <a href="auctions.html" class="icon-btn" title="Auctions"><i class="fas fa-gavel"></i></a>
+    <span class="icon-btn" id="filter-btn" title="Filters"><i class="fas fa-filter"></i></span>
+    <span class="icon-btn" id="fav-btn" title="Favorites"><i class="fas fa-heart"></i></span>
+
+    <span class="icon-btn" id="cart-btn" title="Cart" style="position:relative;">
+      <i class="fas fa-shopping-cart"></i>
+      <span class="cart-count" id="cartCount">0</span>
+    </span>
+
+    <a href="user-profile.html" class="icon-btn" id="profile-btn" title="Profile"><i class="fas fa-user-circle"></i></a>
+    <a href="intex.html" class="logout-btn" id="logout-btn">Log Out</a>
+  </div>
+</header>
+
+<main class="main-content">
+  <aside class="auction-banner">
+    <h3>Live Auctions</h3>
+    <div id="live-auctions-list" class="live-auctions-list"></div>
+    <a href="auctions.html" class="view-all-auctions">View all Auctions</a>
+  </aside>
+
+  <div class="product-grid-container">
+    <span class="local-harvests-heading" id="local-harvests-heading">Local Harvests</span>
+    <div class="product-grid" id="productGrid"></div>
+    <div id="no-results">No products found. Try adjusting your search or filters.</div>
+  </div>
+</main>
+
+<div class="overlay" id="overlay"></div>
+<aside class="cart-sidebar" id="cartSidebar" aria-hidden="true">
+  <button class="close-cart" id="closeCartBtn" aria-label="Close cart">&times;</button>
+  <h3>Your Cart</h3>
+  <div class="cart-items" id="cartItemsContainer">
+    </div>
+
+  <div class="cart-summary">
+    <div class="total"><span>Total</span><span id="cartTotal">₹0.00</span></div>
+    <button class="checkout-btn" id="proceedCheckoutBtn">Proceed to Checkout</button>
+  </div>
+</aside>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const userProfile = JSON.parse(localStorage.getItem('userProfile'));
+  if (!userProfile) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  document.getElementById('welcomeMsg').textContent = `Welcome, ${userProfile.fullName || 'Guest'}!`;
+  document.getElementById('local-harvests-heading').textContent = `Local Harvests in ${userProfile.location || 'Your Location'}`;
+
+  const searchInput = document.getElementById('searchInput');
+  const productGrid = document.getElementById("productGrid");
+  const noResultsMsg = document.getElementById('no-results');
+
+  // cart state (persisted in localStorage)
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+  const saveCart = () => {
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartCount();
+    renderCartSidebar();
+  };
+
+  const updateCartCount = () => {
+    const count = cart.reduce((s, i) => s + i.quantity, 0);
+    document.getElementById('cartCount').textContent = count;
+  };
+
+  // MODIFICATION: Rewritten to check stock and add 'availableStock' to cart items
+  const addToCart = (product) => {
+    const availableStock = Number(product.quantity);
+    const existing = cart.find(i => i.id === product.id);
+    const currentCartQty = existing ? existing.quantity : 0;
+
+    // MODIFICATION: Show error toast if stock limit is reached
+    if (currentCartQty >= availableStock) {
+        const toast = document.createElement('div');
+        toast.textContent = `No more stock for ${product.name}. Only ${availableStock} available.`;
+        toast.style = 'position:fixed;bottom:18px;right:18px;background:var(--red-flag);color:#fff;padding:8px 12px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.12);z-index:2000;';
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2500);
+        return; // Stop the function
+    }
+
+    if (existing) {
+        existing.quantity += 1;
+    } else {
+        // MODIFICATION: Store available stock in the cart item
+        cart.push({
+            id: product.id,
+            name: product.name,
+            price: Number(product.price),
+            image: product.image_url || '',
+            farmer_id: product.farmer_id,
+            quantity: 1,
+            availableStock: availableStock // Store max quantity
+        });
+    }
+    saveCart();
+    
+    // subtle feedback instead of alert
+    const prev = document.activeElement;
+    // tiny toast-like feedback
+    const toast = document.createElement('div');
+    toast.textContent = `${product.name} added to cart`;
+    toast.style = 'position:fixed;bottom:18px;right:18px;background:#2e7d32;color:#fff;padding:8px 12px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.12);z-index:2000;';
+    document.body.appendChild(toast);
+    setTimeout(()=>toast.remove(), 1800);
+    prev?.focus?.();
+  };
+
+  // render cart sidebar contents
+  const cartItemsContainer = document.getElementById('cartItemsContainer');
+  const cartTotalEl = document.getElementById('cartTotal');
+
+  function renderCartSidebar() {
+    cartItemsContainer.innerHTML = '';
+    let total = 0;
+    if (cart.length === 0) {
+      cartItemsContainer.innerHTML = '<p style="color:#666;text-align:center;margin-top:20px;">Your cart is empty.</p>';
+    } else {
+      cart.forEach(item => {
+        const el = document.createElement('div');
+        el.className = 'cart-item';
+        el.dataset.id = item.id;
+        el.innerHTML = `
+          <img src="${item.image || 'images/default_product.png'}" alt="${item.name}">
+          <div class="meta">
+            <h4>${item.name}</h4>
+            <p>₹${item.price.toFixed ? item.price.toFixed(2) : item.price} each</p>
+          </div>
+          <div class="controls">
+            <button class="qty-btn qty-decr" title="Decrease">−</button>
+            <span class="qty">${item.quantity}</span>
+            <button class="qty-btn qty-incr" title="Increase">+</button>
+            <button class="remove-btn" title="Remove">✕</button>
+          </div>
+        `;
+        cartItemsContainer.appendChild(el);
+        total += (Number(item.price) * item.quantity);
+      });
+    }
+    cartTotalEl.textContent = `₹${total.toFixed(2)}`;
+  }
+
+  // cart controls (event delegation)
+  cartItemsContainer.addEventListener('click', (e) => {
+    const root = e.target.closest('.cart-item');
+    if (!root) return;
+    const id = root.dataset.id;
+    const idx = cart.findIndex(i => String(i.id) === String(id));
+    if (idx === -1) return;
+
+    // MODIFICATION: Check against available stock before increasing quantity
+    if (e.target.classList.contains('qty-incr')) {
+        const item = cart[idx];
+        if (item.quantity < item.availableStock) {
+            item.quantity += 1;
+            saveCart();
+        } else {
+            alert(`Maximum stock reached for ${item.name}. Only ${item.availableStock} available.`);
+        }
+    } else if (e.target.classList.contains('qty-decr')) {
+      cart[idx].quantity -= 1;
+      if (cart[idx].quantity <= 0) cart.splice(idx,1);
+      saveCart();
+    } else if (e.target.classList.contains('remove-btn')) {
+      cart.splice(idx,1);
+      saveCart();
+    }
+  });
+
+  // Cart open/close
+  const cartBtn = document.getElementById('cart-btn');
+  const cartSidebar = document.getElementById('cartSidebar');
+  const overlay = document.getElementById('overlay');
+  const closeCartBtn = document.getElementById('closeCartBtn');
+
+  function openCart() {
+    cartSidebar.classList.add('open');
+    overlay.style.display = 'block';
+    overlay.onclick = closeCart;
+    cartSidebar.setAttribute('aria-hidden','false');
+  }
+  function closeCart() {
+    cartSidebar.classList.remove('open');
+    overlay.style.display = 'none';
+    cartSidebar.setAttribute('aria-hidden','true');
+  }
+  cartBtn.addEventListener('click', () => openCart());
+  closeCartBtn.addEventListener('click', () => closeCart());
+
+  // Proceed to checkout: navigate to placeorder.html
+  document.getElementById('proceedCheckoutBtn').addEventListener('click', () => {
+    // ensure cart is not empty
+    if (cart.length === 0) {
+      alert("Your cart is empty.");
+      return;
+    }
+    // navigate to placeorder page which will load cart from localStorage
+    window.location.href = 'placeorder.html';
+  });
+
+  // ---------------------------
+  // Existing product rendering + mandi price check on Add to cart
+  // ---------------------------
+  let products = [];
+
+  const renderProducts = () => {
+    productGrid.innerHTML = '';
+    let visibleCount = 0;
+
+    products.forEach(p => {
+      // MODIFICATION: Check if product is in stock before rendering
+      const isAvailable = Number(p.quantity) > 0;
+      const matchesSearch = p.name.toLowerCase().includes(searchInput.value.toLowerCase());
+      
+      if (matchesSearch && isAvailable) {
+        visibleCount++;
+        const card = document.createElement('div');
+        card.classList.add('product-card');
+        card.innerHTML = `
+          <img src="${p.image_url || 'images/default_product.png'}" alt="${p.name}">
+          <div class="product-info">
+            <h4>${p.name}</h4>
+            <p>₹${p.price}</p>
+            <p>${p.quantity} available</p>
+            <p style="font-size:0.85rem; color:#555;">${p.description || ''}</p>
+            <div class="farmer-info">
+              <img src="images/default_farm.png" alt="${p.farmer_name || 'Farmer'}">
+              <a href="farmerprofile.html?id=${p.farmer_id}">${p.farmer_name || 'Farmer'}</a>
+            </div>
+            <div class="price-warning" style="margin-top:5px; font-size:0.85rem;"></div>
+          </div>
+          <button class="buy-btn">Buy Now</button>
+        `;
+        productGrid.appendChild(card);
+
+        const buyBtn = card.querySelector('.buy-btn');
+        const priceWarning = card.querySelector('.price-warning');
+
+        buyBtn.addEventListener('click', async () => {
+          // 1) fetch mandi price for product.name and p.mandi (if present)
+          try {
+            const res = await fetch(
+              `http://localhost:5000/api/mandi-price?commodity=${encodeURIComponent(p.name)}&mandi=${encodeURIComponent(p.mandi || '')}`
+            );
+            const data = await res.json();
+
+            if (res.ok && data.modal_price) {
+              const mandiPricePerKg = data.modal_price / 100; // quintal -> kg
+              let warningText = '';
+              let allow = true;
+
+              if (Number(p.price) > mandiPricePerKg * 1.2) {
+                warningText = `⚠️ Price ₹${p.price}/kg is higher than mandi ₹${mandiPricePerKg.toFixed(2)}/kg`;
+                priceWarning.style.color = "red";
+                allow = confirm(warningText + "\nAdd to cart anyway?");
+              } else if (Number(p.price) < mandiPricePerKg * 0.8) {
+                warningText = `⚠️ Price ₹${p.price}/kg is lower than mandi ₹${mandiPricePerKg.toFixed(2)}/kg`;
+                priceWarning.style.color = "orange";
+                allow = confirm(warningText + "\nAdd to cart anyway?");
+              } else {
+                warningText = `✅ Fair price: mandi ₹${mandiPricePerKg.toFixed(2)}/kg`;
+                priceWarning.style.color = "green";
+              }
+              priceWarning.textContent = warningText;
+              if (allow) {
+                // MODIFICATION: Pass the full product object 'p' to addToCart
+                addToCart(p);
+              }
+            } else {
+              priceWarning.textContent = "⚠️ No mandi data for this item";
+              priceWarning.style.color = "gray";
+              if (confirm("No mandi data available. Add to cart anyway?")) {
+                // MODIFICATION: Pass the full product object 'p' to addToCart
+                addToCart(p);
+              }
+            }
+          } catch (err) {
+            console.error("Error fetching mandi price:", err);
+            priceWarning.textContent = "⚠️ Error fetching mandi data";
+            priceWarning.style.color = "gray";
+            if (confirm("Error fetching price data. Add to cart anyway?")) {
+              // MODIFICATION: Pass the full product object 'p' to addToCart
+              addToCart(p);
+            }
+          }
+        }); // buyBtn click end
+      } // matchesSearch and isAvailable end
+    });
+
+    noResultsMsg.style.display = visibleCount === 0 ? 'block' : 'none';
+  };
+
+  searchInput.addEventListener('input', () => renderProducts());
+
+  // Fetch products from backend
+  fetch("http://localhost:5000/api/products")
+    .then(res => res.json())
+    .then(data => {
+      console.log("Products from API:", data);
+      products = data;
+      renderProducts();
+      updateCartCount();
+      renderCartSidebar();
+    })
+    .catch(err => console.error(err));
+});
+</script>
+</body>
+</html>

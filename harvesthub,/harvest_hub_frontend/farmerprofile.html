@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Farmer Profile - HarvestHub</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #f0f4f8;
+    margin: 0;
+    padding: 0;
+  }
+
+  .container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+  }
+
+  .profile-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .profile-card h2 {
+    font-size: 2rem;
+    color: #2e7d32;
+    margin-bottom: 10px;
+  }
+
+  .profile-card p {
+    color: #555;
+    margin: 6px 0;
+    font-size: 0.95rem;
+  }
+
+  .badges {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 15px;
+  }
+
+  .badge {
+    background: linear-gradient(135deg, #a8e063, #56ab2f);
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: 0.85rem;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    transition: transform 0.2s ease;
+  }
+
+  .badge:hover {
+    transform: scale(1.1);
+  }
+
+  h3 {
+    margin-top: 40px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #2e7d32;
+  }
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
+    gap: 20px;
+  }
+
+  .product-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  }
+
+  .product-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+
+  .product-card h4 {
+    margin: 8px 0;
+    font-size: 1.05rem;
+    color: #333;
+  }
+
+  .product-card p {
+    color: #666;
+    margin: 4px 0;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 768px) {
+    .profile-card { padding: 20px; }
+    .product-grid { gap: 15px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="profile-card" id="farmerProfile">
+    <h2 id="farmerName">Farmer Name</h2>
+    <p id="farmerEmail">Email: --</p>
+    <p id="farmerContact">Contact: --</p>
+    <p id="farmerLocation">Location: --</p>
+    <p id="farmName">Farm Name: --</p>
+    <p id="farmDesc">Farm Description: --</p>
+    <div class="badges" id="badges">
+      <!-- dummy badges will appear here -->
+    </div>
+  </div>
+
+  <h3>Products by this Farmer</h3>
+  <div class="product-grid" id="farmerProducts"></div>
+</div>
+
+<script>
+const urlParams = new URLSearchParams(window.location.search);
+const farmerId = urlParams.get('id');
+
+if (!farmerId) {
+  alert("No farmer selected!");
+  window.location.href = "index.html";
+}
+
+// Dummy badges
+const badgeList = ["🌿 Organic Supplier", "🏆 Good Farmer", "🍀 Eco-Friendly", "🌾 Quality Produce"];
+
+const badgesContainer = document.getElementById('badges');
+badgeList.forEach(b => {
+  const span = document.createElement('span');
+  span.classList.add('badge');
+  span.textContent = b;
+  badgesContainer.appendChild(span);
+});
+
+// Fetch farmer info
+fetch(`http://localhost:5000/api/farmers/${farmerId}`)
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById('farmerName').textContent = data.fullName || "Unknown Farmer";
+    document.getElementById('farmerEmail').textContent = "Email: " + (data.email || "--");
+    document.getElementById('farmerContact').textContent = "Contact: " + (data.contact || "--");
+    document.getElementById('farmerLocation').textContent = "Location: " + (data.location || "--");
+    document.getElementById('farmName').textContent = "Farm Name: " + (data.farmName || "--");
+    document.getElementById('farmDesc').textContent = "Farm Description: " + (data.farmDescription || "--");
+  })
+  .catch(err => console.error(err));
+
+// Fetch products by this farmer
+fetch(`http://localhost:5000/api/products?farmer_id=${farmerId}`)
+
+  .then(res => res.json())
+  .then(products => {
+    const grid = document.getElementById('farmerProducts');   
+    products.forEach(p => {
+      const card = document.createElement('div');
+      card.classList.add('product-card');
+      card.innerHTML = `
+        <img src="${p.image_url || 'images/default_product.png'}" alt="${p.name}">
+        <h4>${p.name}</h4>
+        <p>₹${p.price}</p>
+        <p>${p.quantity} available</p>
+      `;
+      grid.appendChild(card);
+    });
+  })
+  .catch(err => console.error(err));
+</script>
+
+</body>
+</html>

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register - HarvestHub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: url('images/marketreg.jpg') no-repeat center center fixed;
+      background-size: cover;
+      position: relative;
+    }
+
+    .auth-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      padding: 1rem 2rem;
+      background: rgba(255, 255, 255, 0.);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      color: #2e7d32;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      flex-wrap: wrap;
+      text-align: center;
+    }
+
+    .auth-header img {
+      height: 60px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .auth-header h1 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.5rem;
+      margin: 0;
+    }
+
+    @media (max-width: 600px) {
+      .auth-header {
+        flex-direction: column;
+        gap: 8px;
+        padding: 1rem;
+      }
+
+      .auth-header img {
+        height: 50px;
+      }
+
+      .auth-header h1 {
+        font-size: 2rem;
+      }
+    }
+
+    .auth-container {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 20px;
+      padding: 2rem;
+      max-width: 500px;
+      margin: 2rem auto;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .auth-form h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #2e7d32;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+      color: #2e7d32;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      padding: 0.6rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      background-color: rgba(255, 255, 255, 0.9);
+      color: #2e7d32;
+    }
+
+    .form-group input[readonly] {
+      background-color: #f0f0f0;
+    }
+
+    .user-type-options {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+    }
+
+    .checkbox-group input {
+      margin-right: 0.5rem;
+    }
+
+    .btn {
+      background-color: #2e7d32;
+      color: white;
+      padding: 0.75rem 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.2s ease;
+    }
+
+    .btn:hover {
+      background-color: #256d27;
+    }
+
+    .message {
+      margin-top: 1rem;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #2e7d32;
+    }
+
+    .password-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .password-wrapper input {
+      flex: 1;
+      padding-right: 2.5rem;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 10px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      color: #888;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <header class="auth-header">
+    <img src="images/bglogo.png" alt="Harvest Hub Logo">
+    <h1>HarvestHub</h1>
+  </header>
+
+  <main class="auth-container">
+    <form id="registerForm" class="auth-form">
+      <h2>Create an Account</h2>
+
+      <div class="form-group">
+        <label>User Type</label>
+        <div class="user-type-options">
+          <label><input type="radio" name="userType" value="farmer" required /> I am a Farmer</label>
+          <label><input type="radio" name="userType" value="buyer" required /> I am a Buyer</label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="fullName">Full Name / Business Name</label>
+        <input type="text" id="fullName" required />
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" required />
+      </div>
+
+      <div class="form-group">
+        <label for="contact">Contact Number</label>
+        <input type="text" id="contact" maxlength="10" required />
+      </div>
+
+      <div class="form-group">
+        <label for="pincode">Pincode</label>
+        <input type="text" id="pincode" maxlength="6" required />
+      </div>
+
+      <div class="form-group">
+        <label for="autofillLocation">Detected Location</label>
+        <input type="text" id="autofillLocation" readonly />
+      </div>
+
+      <div class="form-group">
+        <label for="dob">Date of Birth</label>
+        <input type="date" id="dob" required />
+      </div>
+
+      <div class="form-group password-group">
+        <label for="password">Password</label>
+        <div class="password-wrapper">
+          <input type="password" id="password" required />
+          <span class="toggle-password" onclick="togglePassword('password', this)">🙈</span>
+        </div>
+      </div>
+
+      <div class="form-group password-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <div class="password-wrapper">
+          <input type="password" id="confirmPassword" required />
+          <span class="toggle-password" onclick="togglePassword('confirmPassword', this)">🙈</span>
+        </div>
+      </div>
+
+      <div id="farmerFields" style="display: none;">
+        <div class="form-group">
+          <label for="farmName">Farm Name</label>
+          <input type="text" id="farmName" />
+        </div>
+
+        <div class="form-group">
+          <label for="farmLocation">Farm Location</label>
+          <input type="text" id="farmLocation" />
+        </div>
+
+        <div class="form-group">
+          <label for="farmDescription">Brief Description</label>
+          <textarea id="farmDescription" rows="3"></textarea>
+        </div>
+      </div>
+
+      <div class="form-group checkbox-group">
+        <input type="checkbox" id="terms" required />
+        <label for="terms">I accept the Terms & Conditions</label>
+      </div>
+
+      <div class="form-group">
+        <button type="submit" class="btn">Register</button>
+      </div>
+
+      <div id="registerMessage" class="message"></div>
+
+    
+    </form>
+  </main>
+
+  <script>
+  // Show farmer-specific fields
+  const userTypeRadios = document.querySelectorAll('input[name="userType"]');
+  const farmerFields = document.getElementById('farmerFields');
+
+  userTypeRadios.forEach(radio => {
+    radio.addEventListener('change', () => {
+      farmerFields.style.display = radio.value === 'farmer' ? 'block' : 'none';
+    });
+  });
+
+  // Auto-detect location using pincode
+  const pincodeInput = document.getElementById('pincode');
+  const locationInput = document.getElementById('autofillLocation');
+
+  pincodeInput.addEventListener('blur', () => {
+    const pincode = pincodeInput.value.trim();
+    if (pincode.length === 6 && /^[0-9]+$/.test(pincode)) {
+      fetch(`https://api.postalpincode.in/pincode/${pincode}`)
+        .then(response => response.json())
+        .then(data => {
+          const info = data[0];
+          if (info.Status === "Success") {
+            const postOffice = info.PostOffice[0];
+            locationInput.value = `${postOffice.District}, ${postOffice.State}`;
+          } else {
+            locationInput.value = "Invalid Pincode";
+          }
+        })
+        .catch(() => {
+          locationInput.value = "Error fetching location";
+        });
+    } else {
+      locationInput.value = "Invalid Pincode format";
+    }
+  });
+
+  // Handle password toggle
+  function togglePassword(id, el) {
+    const input = document.getElementById(id);
+    if (input.type === "password") {
+      input.type = "text";
+      el.textContent = "👁️";
+    } else {
+      input.type = "password";
+      el.textContent = "🙈";
+    }
+  }
+
+  // Form submit – send data to backend
+  document.getElementById('registerForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const userType = document.querySelector('input[name="userType"]:checked')?.value;
+    const fullName = document.getElementById('fullName').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const contact = document.getElementById('contact').value.trim();
+    const pincode = document.getElementById('pincode').value.trim();
+    const location = document.getElementById('autofillLocation').value.trim();
+    const dob = document.getElementById('dob').value;
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+
+    const farmName = document.getElementById('farmName').value.trim();
+    const farmLocation = document.getElementById('farmLocation').value.trim();
+    const farmDescription = document.getElementById('farmDescription').value.trim();
+
+    const termsAccepted = document.getElementById('terms').checked;
+
+    if (!userType || !fullName || !email || !contact || !pincode || !dob || !password || !confirmPassword) {
+      document.getElementById('registerMessage').textContent = 'All fields are required';
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      document.getElementById('registerMessage').textContent = 'Passwords do not match';
+      return;
+    }
+
+    if (!termsAccepted) {
+      document.getElementById('registerMessage').textContent = 'You must accept the Terms & Conditions';
+      return;
+    }
+
+    const payload = {
+      userType,
+      fullName,
+      email,
+      contact,
+      pincode,
+      location,
+      dob,
+      password,
+      farmName: userType === 'farmer' ? farmName : null,
+      farmLocation: userType === 'farmer' ? farmLocation : null,
+      farmDescription: userType === 'farmer' ? farmDescription : null
+    };
+
+    try {
+      const res = await fetch('http://localhost:5000/api/users/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        document.getElementById('registerMessage').textContent = 'Registration successful! Redirecting to login...';
+        
+        // Redirect to login page after 2 seconds
+        setTimeout(() => {
+            window.location.href = 'login.html';
+        }, 2000);
+
+      } else {
+        document.getElementById('registerMessage').textContent = data.error || 'Registration failed';
+      }
+    } catch (err) {
+      console.error(err);
+      document.getElementById('registerMessage').textContent = 'Server error';
+    }
+  });
+</script>
+
+</body>
+</html>

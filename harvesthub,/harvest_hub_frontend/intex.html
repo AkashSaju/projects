@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Harvest Hub - Digital Farmers' Market</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="logo">
+        <img src="images/bglogo.png" alt="Harvest Hub Logo">
+      <span>Harvest Hub</span>
+    </div>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#products">Products</a>
+      <a href="login.html">Login</a>
+      <a href="register.html">Register</a>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1>Welcome to Harvest Hub</h1>
+    <p>Your trusted platform for fresh, local, and affordable farm produce.</p>
+    <div class="hero-buttons">
+          <a href="login.html" class="btn">Explore Products</a>
+          <a href="login.html" class="btn btn-secondary">Sell Your Produce</a>
+        
+      </div>
+      
+  </section>
+
+  <!-- Revolution Section -->
+<section class="revolution">
+    <h2 class="tagline">
+        
+        <span class="main-text">From <span class="soil">Soil</span> to <span class="sale">Sale</span></span>
+
+      </h2>
+      
+      
+      
+    <p class="mission">Harvest Hub is revolutionizing the way agriculture works — empowering local farmers, eliminating middlemen, and delivering fresh, affordable produce directly to your home or business.</p>
+    <p class="vision">We believe every farmer deserves a fair price and every consumer deserves transparency. Harvest Hub bridges this gap with trust, tech, and traceability.</p>
+  </section>
+  
+  <!-- Key Features Section -->
+  <section class="platform-features">
+    <h2>Why Choose Harvest Hub?</h2>
+    <div class="feature-grid">
+      <div class="feature-item">
+        <h3>🚜 Empower Farmers</h3>
+        <p>Enable small-scale producers to sell directly with dignity and earn more.</p>
+      </div>
+      <div class="feature-item">
+        <h3>📊 Real-Time Market Prices</h3>
+        <p>Stay updated with live price comparisons against government data.</p>
+      </div>
+      <div class="feature-item">
+        <h3>🛒 Seamless Buying</h3>
+        <p>Browse, compare, and buy from multiple farmers in one trusted place.</p>
+      </div>
+      <div class="feature-item">
+        <h3>🔒 Safe Transactions</h3>
+        <p>Wallet-based system ensures secure payments and verified buyers/sellers.</p>
+      </div>
+      <div class="feature-item">
+        <h3>📦 Assisted Delivery</h3>
+        <p>Track logistics and get your orders fulfilled via trusted local networks.</p>
+      </div>
+      <div class="feature-item">
+        <h3>⭐ Ratings & Reviews</h3>
+        <p>Real feedback from users ensures quality and builds community trust.</p>
+      </div>
+    </div>
+  </section>
+  
+
+  <!-- Featured Product Listing -->
+  <section class="product-listing" id="products">
+    <h2>Featured Produce</h2>
+    <div class="product-grid" id="productGrid">
+      <!-- Products will be loaded dynamically -->
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <h2>Join the Farm-to-Table Revolution</h2>
+    <a href="#" class="btn btn-primary">Get Started</a>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <span>Harvest Hub</span>
+      <div class="footer-links">
+        <a href="#">Terms of Service</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Contact</a>
+      </div>
+      <p>© 2025 Harvest Hub. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    const products = [
+      { name: "Fresh Tomatoes", price: "₹40/kg", image: "images/tomatoes.jpg" },
+      { name: "Organic Potatoes", price: "₹30/kg", image: "images/potatoes.jpg" },
+      { name: "Sweet Bananas", price: "₹25/dozen", image: "images/banana.jpg" },
+      { name: "Carrots", price: "₹45/kg", image: "images/carrots.jpg" },
+      { name: "Green Spinach", price: "₹15/bundle", image: "images/Green spinach.jpg" },
+      { name: "Cauliflower", price: "₹35/piece", image: "images/Cauliflower.jpg" }
+    ];
+
+    const grid = document.getElementById('productGrid');
+    products.forEach(prod => {
+      const card = document.createElement('div');
+      card.className = 'product-card';
+      card.innerHTML = `
+        <img src="${prod.image}" alt="${prod.name}" />
+        <h3>${prod.name}</h3>
+        <p>${prod.price}</p>
+        <button class="btn">Buy Now</button>
+      `;
+      grid.appendChild(card);
+    });
+  </script>
+</body>
+</html>
