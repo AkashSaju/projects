@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard - HarvestHub</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+:root {
+    --primary-color: #2e7d32;
+    --secondary-color: #dcedc8;
+    --text-color: #333;
+}
+body { font-family: 'Poppins', sans-serif; margin: 0; display: flex; height: 100vh; overflow: hidden; background: #f4f4f4; }
+aside { width: 250px; background-color: var(--secondary-color); padding: 2rem 1rem; display: flex; flex-direction: column; box-shadow: 2px 0 5px rgba(0,0,0,0.1); }
+aside h2 { color: var(--primary-color); text-align: center; margin-bottom: 2rem; }
+.sidebar-nav a { display: block; padding: 0.75rem 1rem; margin-bottom: 0.5rem; text-decoration: none; color: var(--text-color); border-radius: 6px; transition: background-color 0.2s, color 0.2s; font-weight: 500; }
+.sidebar-nav a:hover, .sidebar-nav a.active { background-color: var(--primary-color); color: #fff; }
+main { flex: 1; padding: 2rem; overflow-y: auto; }
+h1 { color: var(--primary-color); margin-bottom: 1rem; }
+table { width: 100%; border-collapse: collapse; margin-bottom: 2rem; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+th, td { padding: 1rem; text-align: left; border-bottom: 1px solid #eee; }
+th { background: var(--primary-color); color: #fff; font-weight: 600; }
+.card { background: #fff; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+.filters { display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
+.filters select, .filters input { padding: 0.5rem; border-radius: 6px; border: 1px solid #ccc; }
+button { cursor: pointer; background: var(--primary-color); color: #fff; border: none; padding: 0.5rem 1rem; border-radius: 6px; transition: 0.2s; }
+button:hover { background: #1b5e20; }
+</style>
+</head>
+<body>
+
+<aside>
+    <h2><i class="fas fa-leaf"></i> HarvestHub</h2>
+    <nav class="sidebar-nav">
+        <a href="#" class="active" data-section="analytics"><i class="fas fa-chart-line"></i> Analytics</a>
+        <a href="#" data-section="users"><i class="fas fa-users"></i> Users Report</a>
+        <a href="#" data-section="products"><i class="fas fa-carrot"></i> Products Report</a>
+        
+        <a href="#" data-section="delivery-tasks"><i class="fas fa-truck"></i> Delivery Tasks</a>
+    </nav>
+</aside>
+
+<main>
+    <!-- ANALYTICS -->
+    <div id="analytics" class="admin-section">
+        <h1>Analytics Overview</h1>
+        <div class="card">
+            <label for="analyticsType">Select Analytics Type:</label>
+            <select id="analyticsType">
+                <option value="avgPrice">Avg Modal Price per Commodity</option>
+                <option value="priceComparison">Price Comparison by District</option>
+            </select>
+            <label for="analyticsFrom">From:</label>
+            <input type="date" id="analyticsFrom">
+            <label for="analyticsTo">To:</label>
+            <input type="date" id="analyticsTo">
+            <button id="analyticsApply">Apply</button>
+        </div>
+        <div class="card">
+            <canvas id="mainChart"></canvas>
+        </div>
+    </div>
+
+    <!-- USERS -->
+    <div id="users" class="admin-section" style="display:none;">
+        <h1>Users Report</h1>
+        <div class="filters">
+            <select id="userTypeFilter">
+                <option value="">All Types</option>
+                <option value="farmer">Farmer</option>
+                <option value="buyer">Buyer</option>
+                <option value="delivery_agent">Delivery Agent</option>
+            </select>
+            <input type="date" id="userFrom">
+            <input type="date" id="userTo">
+            <button id="applyUserFilter">Apply</button>
+        </div>
+        <table id="usersTable">
+            <thead>
+                <tr><th>ID</th><th>Type</th><th>Name</th><th>Email</th><th>Contact</th></tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <!-- PRODUCTS -->
+    <div id="products" class="admin-section" style="display:none;">
+        <h1>Products Report</h1>
+        <div class="filters">
+            <select id="productCategoryFilter">
+                <option value="">All Categories</option>
+                <option value="veg">Veg</option>
+                <option value="fruit">Fruit</option>
+                <option value="Dairy">Dairy</option>
+            </select>
+            <input type="text" id="productFarmerID" placeholder="Farmer ID">
+            <input type="date" id="productFrom">
+            <input type="date" id="productTo">
+            <button id="applyProductFilter">Apply</button>
+        </div>
+        <table id="productsTable">
+            <thead>
+                <tr>
+                    <th>ID</th><th>Name</th><th>Category</th><th>Price</th><th>Qty</th><th>Farmer ID</th><th>Description</th><th>Created At</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <!-- ORDERS -->
+    <div id="orders" class="admin-section" style="display:none;">
+        <h1>Orders Report</h1>
+        <div class="filters">
+            <select id="orderStatusFilter">
+                <option value="">All Status</option>
+                <option value="Pending">Pending</option>
+                <option value="In Transit">In Transit</option>
+                <option value="Delivered">Delivered</option>
+                <option value="Cancelled">Cancelled</option>
+            </select>
+            <input type="date" id="orderFrom">
+            <input type="date" id="orderTo">
+            <button id="applyOrderFilter">Apply</button>
+        </div>
+        <table id="ordersTable">
+            <thead>
+                <tr><th>Order ID</th><th>Buyer</th><th>Total</th><th>Status</th><th>Created At</th><th># Items</th></tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <!-- DELIVERY -->
+    <div id="delivery-tasks" class="admin-section" style="display:none;">
+        <h1>Delivery Tasks</h1>
+        <div class="filters">
+            <select id="deliveryStatusFilter">
+                <option value="">All Status</option>
+                <option value="Assigned">Pending</option>
+                <option value="In Transit">In Transit</option>
+                <option value="Delivered">Delivered</option>
+                <option value="Cancelled">Cancelled</option>
+            </select>
+            <input type="text" id="deliveryAgentID" placeholder="Agent ID">
+            <input type="date" id="deliveryFrom">
+            <input type="date" id="deliveryTo">
+            <button id="applyDeliveryFilter">Apply</button>
+        </div>
+        <table id="deliveryTable">
+            <thead>
+                <tr><th>ID</th><th>Order ID</th><th>Agent ID</th><th>Pickup</th><th>Delivery</th><th>Status</th><th>Created At</th></tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const navLinks = document.querySelectorAll('.sidebar-nav a');
+    const sections = document.querySelectorAll('.admin-section');
+    let mainChartInstance;
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', e => {
+            e.preventDefault();
+            navLinks.forEach(nav => nav.classList.remove('active'));
+            sections.forEach(sec => sec.style.display = 'none');
+            link.classList.add('active');
+            document.getElementById(link.dataset.section).style.display = 'block';
+            loadSection(link.dataset.section);
+        });
+    });
+
+    async function loadSection(section){
+        switch(section){
+            case 'users': loadUsers(); break;
+            case 'products': loadProducts(); break;
+            case 'orders': loadOrders(); break;
+            case 'delivery-tasks': loadDelivery(); break;
+            case 'analytics': renderAnalyticsChart(); break;
+        }
+    }
+
+    // USERS
+    async function loadUsers(type='', from='', to=''){
+        const res = await fetch('http://localhost:5000/api/users');
+        const users = await res.json();
+        const tbody = document.querySelector('#usersTable tbody');
+        tbody.innerHTML = '';
+        users.filter(u => (!type || u.userType===type) &&
+                         (!from || new Date(u.createdAt) >= new Date(from)) &&
+                         (!to || new Date(u.createdAt) <= new Date(to)))
+             .forEach(u => {
+                 const tr = document.createElement('tr');
+                 tr.innerHTML = `<td>${u.id}</td><td>${u.userType}</td><td>${u.fullName}</td>
+                                 <td>${u.email}</td><td>${u.contact}</td
+                                 `;
+                 tbody.appendChild(tr);
+             });
+    }
+    document.getElementById('applyUserFilter').addEventListener('click', ()=>{
+        loadUsers(document.getElementById('userTypeFilter').value,
+                  document.getElementById('userFrom').value,
+                  document.getElementById('userTo').value);
+    });
+
+   // PRODUCTS
+async function loadProducts(category='', farmerID='', from='', to=''){
+    const res = await fetch('http://localhost:5000/api/products');
+    const products = await res.json();
+    const tbody = document.querySelector('#productsTable tbody');
+    tbody.innerHTML = '';
+    products.filter(p => (!category || p.category===category) &&
+                         (!farmerID || p.farmer_id==farmerID) &&
+                         (!from || new Date(p.created_at) >= new Date(from)) &&
+                         (!to || new Date(p.created_at) <= new Date(to)))
+            .forEach(p=>{
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${p.id}</td>
+                                <td>${p.name}</td>
+                                <td>${p.category}</td>
+                                <td>₹${p.price}</td>
+                                <td>${p.quantity}</td>
+                                <td>${p.farmer_id || ''}</td>
+                                <td>${p.description || ''}</td>
+                                <td>${new Date(p.created_at).toLocaleDateString()}</td>`;
+                tbody.appendChild(tr);
+            });
+}
+
+document.getElementById('applyProductFilter').addEventListener('click', ()=>{
+    loadProducts(
+        document.getElementById('productCategoryFilter').value,
+        document.getElementById('productFarmerID').value,
+        document.getElementById('productFrom').value,
+        document.getElementById('productTo').value
+    );
+});
+
+
+    // ORDERS
+    async function loadOrders(status='', from='', to=''){
+        const res = await fetch('http://localhost:5000/api/orders');
+        const orders = await res.json();
+        const tbody = document.querySelector('#ordersTable tbody');
+        tbody.innerHTML = '';
+        orders.filter(o => (!status || o.status===status) &&
+                           (!from || new Date(o.created_at)>=new Date(from)) &&
+                           (!to || new Date(o.created_at)<=new Date(to)))
+              .forEach(o=>{
+                  const tr = document.createElement('tr');
+                  tr.innerHTML = `<td>${o.id}</td><td>${o.buyerName||''}</td><td>₹${o.total}</td>
+                                  <td>${o.status}</td><td>${new Date(o.created_at).toLocaleDateString()}</td>
+                                  <td>${o.items_count}</td>`;
+                  tbody.appendChild(tr);
+              });
+    }
+    document.getElementById('applyOrderFilter').addEventListener('click', ()=>{
+        loadOrders(document.getElementById('orderStatusFilter').value,
+                   document.getElementById('orderFrom').value,
+                   document.getElementById('orderTo').value);
+    });
+
+    // DELIVERY
+    async function loadDelivery(status='', agentID='', from='', to=''){
+        const res = await fetch('http://localhost:5000/api/delivery/admin/all');
+        const tasks = await res.json();
+        const tbody = document.querySelector('#deliveryTable tbody');
+        tbody.innerHTML = '';
+        tasks.filter(t=> (!status || t.status===status) &&
+                         (!agentID || t.agent_id==agentID) &&
+                         (!from || new Date(t.created_at)>=new Date(from)) &&
+                         (!to || new Date(t.created_at)<=new Date(to)))
+             .forEach(t=>{
+                 const tr = document.createElement('tr');
+                 tr.innerHTML = `<td>${t.id}</td><td>${t.order_id}</td><td>${t.agent_id}</td>
+                                 <td>${t.pickup_name} (${t.pickup_location})</td>
+                                 <td>${t.delivery_name} (${t.delivery_location})</td>
+                                 <td>${t.status}</td>
+                                 <td>${new Date(t.created_at).toLocaleDateString()}</td>`;
+                 tbody.appendChild(tr);
+             });
+    }
+    document.getElementById('applyDeliveryFilter').addEventListener('click', ()=>{
+        loadDelivery(document.getElementById('deliveryStatusFilter').value,
+                     document.getElementById('deliveryAgentID').value,
+                     document.getElementById('deliveryFrom').value,
+                     document.getElementById('deliveryTo').value);
+    });
+
+    // ANALYTICS
+    async function renderAnalyticsChart(type='avgPrice', from='', to='') {
+        const ctx = document.getElementById('mainChart').getContext('2d');
+        if(mainChartInstance) mainChartInstance.destroy();
+        try {
+            const res = await fetch("http://localhost:5000/api/kerala-analytics");
+            const data = await res.json();
+
+            let chartData = {}, chartOptions = {};
+
+            if(type==='avgPrice'){
+                const commodityMap = {};
+                Object.keys(data).forEach(district=>{
+                    Object.keys(data[district]).forEach(c=>{
+                        Object.keys(data[district][c]).forEach(v=>{
+                            if(!commodityMap[c]) commodityMap[c]=[];
+                            commodityMap[c].push(data[district][c][v].modal_price);
+                        });
+                    });
+                });
+                const labels = [], avgPrices=[];
+                Object.keys(commodityMap).forEach(c=>{
+                    labels.push(c);
+                    avgPrices.push((commodityMap[c].reduce((a,b)=>a+b,0)/commodityMap[c].length).toFixed(2));
+                });
+                chartData={labels,datasets:[{label:'Avg Modal Price (₹)',data:avgPrices,backgroundColor:'rgba(46,125,50,0.8)'}]};
+                chartOptions={indexAxis:'y',responsive:true,plugins:{legend:{display:false},title:{display:true,text:'Avg Modal Price per Commodity'}}};
+            } else {
+                // priceComparison
+                const commodities = new Set(), districts=Object.keys(data);
+                districts.forEach(d=>Object.keys(data[d]).forEach(c=>commodities.add(c)));
+                const commodityArr = Array.from(commodities);
+                const datasets = districts.map((d,i)=>{
+                    const vals = commodityArr.map(c=>{
+                        const prices=[];
+                        if(data[d][c]) Object.keys(data[d][c]).forEach(v=>prices.push(data[d][c][v].modal_price));
+                        return prices.length? (prices.reduce((a,b)=>a+b,0)/prices.length).toFixed(2):0;
+                    });
+                    return {label:d,data:vals,backgroundColor:`hsl(${i*60%360},70%,50%)`};
+                });
+                chartData={labels:commodityArr,datasets};
+                chartOptions={responsive:true,plugins:{title:{display:true,text:'Price Comparison by Commodity & District'},legend:{position:'top'}}};
+            }
+
+            mainChartInstance = new Chart(ctx,{type:'bar',data:chartData,options:chartOptions});
+        } catch(e){ console.error(e); ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height); ctx.fillText("Failed to load analytics",20,50);}
+    }
+
+    document.getElementById('analyticsApply').addEventListener('click', ()=>{
+        const type=document.getElementById('analyticsType').value;
+        renderAnalyticsChart(type, document.getElementById('analyticsFrom').value, document.getElementById('analyticsTo').value);
+    });
+
+    // INITIAL LOAD
+    loadSection('analytics');
+});
+</script>
+</body>
+</html>
